@@ -173,9 +173,6 @@ namespace SchoolSystem.Data.Migrations
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("StudentId1")
-                        .HasColumnType("int");
-
                     b.Property<int>("SubjectId")
                         .HasColumnType("int");
 
@@ -185,8 +182,6 @@ namespace SchoolSystem.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("StudentId");
-
-                    b.HasIndex("StudentId1");
 
                     b.HasIndex("SubjectId");
 
@@ -207,9 +202,6 @@ namespace SchoolSystem.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
-
-                    b.Property<int>("TeacherId")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -232,9 +224,6 @@ namespace SchoolSystem.Data.Migrations
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("StudentId1")
-                        .HasColumnType("int");
-
                     b.Property<int>("SubjectId")
                         .HasColumnType("int");
 
@@ -249,8 +238,6 @@ namespace SchoolSystem.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("StudentId");
-
-                    b.HasIndex("StudentId1");
 
                     b.HasIndex("SubjectId");
 
@@ -271,9 +258,6 @@ namespace SchoolSystem.Data.Migrations
                         .IsRequired()
                         .HasColumnType("int");
 
-                    b.Property<int?>("GroupId1")
-                        .HasColumnType("int");
-
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -281,8 +265,6 @@ namespace SchoolSystem.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("GroupId");
-
-                    b.HasIndex("GroupId1");
 
                     b.HasIndex("UserId");
 
@@ -316,6 +298,7 @@ namespace SchoolSystem.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int?>("GroupID")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<decimal>("Salary")
@@ -330,9 +313,7 @@ namespace SchoolSystem.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GroupID")
-                        .IsUnique()
-                        .HasFilter("[GroupID] IS NOT NULL");
+                    b.HasIndex("GroupID");
 
                     b.HasIndex("SubjectId");
 
@@ -476,19 +457,15 @@ namespace SchoolSystem.Data.Migrations
             modelBuilder.Entity("SchoolSystem.Data.Data.Entities.Grade", b =>
                 {
                     b.HasOne("SchoolSystem.Data.Data.Entities.Student", "Student")
-                        .WithMany()
+                        .WithMany("Grades")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("SchoolSystem.Data.Data.Entities.Student", null)
-                        .WithMany("Grades")
-                        .HasForeignKey("StudentId1");
-
                     b.HasOne("SchoolSystem.Data.Data.Entities.Subject", "Subject")
                         .WithMany()
                         .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("SchoolSystem.Data.Data.Entities.Teacher", "Teacher")
@@ -507,19 +484,15 @@ namespace SchoolSystem.Data.Migrations
             modelBuilder.Entity("SchoolSystem.Data.Data.Entities.Note", b =>
                 {
                     b.HasOne("SchoolSystem.Data.Data.Entities.Student", "Student")
-                        .WithMany()
+                        .WithMany("Notes")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("SchoolSystem.Data.Data.Entities.Student", null)
-                        .WithMany("Notes")
-                        .HasForeignKey("StudentId1");
-
                     b.HasOne("SchoolSystem.Data.Data.Entities.Subject", "Subject")
                         .WithMany()
                         .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("SchoolSystem.Data.Data.Entities.Teacher", "Teacher")
@@ -538,19 +511,15 @@ namespace SchoolSystem.Data.Migrations
             modelBuilder.Entity("SchoolSystem.Data.Data.Entities.Student", b =>
                 {
                     b.HasOne("SchoolSystem.Data.Data.Entities.Group", "Group")
-                        .WithMany()
+                        .WithMany("Students")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("SchoolSystem.Data.Data.Entities.Group", null)
-                        .WithMany("Students")
-                        .HasForeignKey("GroupId1");
-
                     b.HasOne("SchoolSystem.Data.Data.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Group");
@@ -561,20 +530,21 @@ namespace SchoolSystem.Data.Migrations
             modelBuilder.Entity("SchoolSystem.Data.Data.Entities.Teacher", b =>
                 {
                     b.HasOne("SchoolSystem.Data.Data.Entities.Group", "Group")
-                        .WithOne("Teacher")
-                        .HasForeignKey("SchoolSystem.Data.Data.Entities.Teacher", "GroupID")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .WithMany()
+                        .HasForeignKey("GroupID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("SchoolSystem.Data.Data.Entities.Subject", "Subject")
                         .WithMany()
                         .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("SchoolSystem.Data.Data.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Group");
@@ -587,9 +557,6 @@ namespace SchoolSystem.Data.Migrations
             modelBuilder.Entity("SchoolSystem.Data.Data.Entities.Group", b =>
                 {
                     b.Navigation("Students");
-
-                    b.Navigation("Teacher")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("SchoolSystem.Data.Data.Entities.Student", b =>

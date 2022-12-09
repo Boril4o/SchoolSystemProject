@@ -1,13 +1,18 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SchoolSystem.Data.Data.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace SchoolSystem.Data.Data
 {
     public class ApplicationDbContext : IdentityDbContext<User>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options)
+           : base(options)
         {
         }
 
@@ -25,78 +30,45 @@ namespace SchoolSystem.Data.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            //Grade
             builder
-                .Entity<Grade>()
-                .HasOne(g => g.Subject)
+              .Entity<Grade>()
+              .HasOne(g => g.Student)
+              .WithMany(s => s.Grades)
+              .HasForeignKey(g => g.StudentId)
+              .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+               .Entity<Note>()
+               .HasOne(n => n.Student)
+               .WithMany(s => s.Notes)
+               .HasForeignKey(n => n.StudentId)
+               .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .Entity<Note>()
+                .HasOne(n => n.Teacher)
                 .WithMany()
+                .HasForeignKey(n => n.TeacherId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .Entity<Student>()
+                .HasOne(s => s.Group)
+                .WithMany(g => g.Students)
+                .HasForeignKey(s => s.GroupId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder
                 .Entity<Grade>()
                 .HasOne(g => g.Teacher)
                 .WithMany()
+                .HasForeignKey(g => g.TeacherId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder
-                .Entity<Grade>()
-                .HasOne(g => g.Student)
-                .WithMany()
-                .OnDelete(DeleteBehavior.Restrict);
-
-            //Note
-            builder
-                .Entity<Note>()
-                .HasOne(n => n.Subject)
-                .WithMany()
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder
-                .Entity<Note>()
-                .HasOne(n => n.Teacher)
-                .WithMany()
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder
-                .Entity<Note>()
-                .HasOne(n => n.Student)
-                .WithMany()
-                .OnDelete(DeleteBehavior.Restrict);
-
-            //Teacher
-            builder
-                .Entity<Teacher>()
-                .HasOne(t => t.User)
-                .WithMany()
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder
-                .Entity<Teacher>()
-                .HasOne(t => t.Group)
-                .WithOne(g => g.Teacher)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder
-                .Entity<Teacher>()
-                .HasOne(t => t.Subject)
-                .WithMany()
-                .OnDelete(DeleteBehavior.Restrict);
-
-            //Student
-            builder
-              .Entity<Student>()
-              .HasOne(s => s.User)
-              .WithMany()
-              .OnDelete(DeleteBehavior.Restrict);
-
-            builder
-               .Entity<Student>()
-               .HasOne(s => s.Group)
-               .WithMany()
-               .OnDelete(DeleteBehavior.Restrict);
 
 
             base.OnModelCreating(builder);
         }
+
     }
 }

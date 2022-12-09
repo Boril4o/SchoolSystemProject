@@ -18,9 +18,9 @@ namespace SchoolSystem.Data.Data.Entities
         [MaxLength(ClassNumberMaxLength)]
         public string Number { get; set; }
 
-        [ForeignKey(nameof(Teacher))]
-        public int TeacherId { get; set; }
-        public Teacher Teacher { get; set; }
+        //[ForeignKey(nameof(Teacher))]
+        //public int TeacherId { get; set; }
+        //public Teacher Teacher { get; set; }
 
         public List<Student> Students { get; set; }
     }
