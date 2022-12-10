@@ -8,9 +8,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchoolSystem", "SchoolSyste
 		{DB3E25E1-BF62-472B-80B1-72EA58D9A48B} = {DB3E25E1-BF62-472B-80B1-72EA58D9A48B}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchoolSystem.Core", "SchoolSystem.Core\SchoolSystem.Core.csproj", "{98FDE2A6-495C-4F39-99DF-A0856898246D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchoolSystem.Core", "SchoolSystem.Core\SchoolSystem.Core.csproj", "{98FDE2A6-495C-4F39-99DF-A0856898246D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchoolSystem.Data", "SchoolSystem.Data\SchoolSystem.Data.csproj", "{DB3E25E1-BF62-472B-80B1-72EA58D9A48B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchoolSystem.Infrastructure", "SchoolSystem.Data\SchoolSystem.Infrastructure.csproj", "{DB3E25E1-BF62-472B-80B1-72EA58D9A48B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -26,6 +26,12 @@ namespace SchoolSystem.Data.Data.Constants
         public const int UserMaxAge = 99;
         public const int UserMinAge = 7;
 
+        public const int UserEmailMaxLength = 320;
+        public const int UserEmailMinLength = 3;
+
+        public const int UserPasswordMaxLength = 20;
+        public const int UserPasswordMinLength = 5;
+
         //Note
         public const int NoteTitleMaxLength = 20;
         public const int NoteTitleMinLength = 3;

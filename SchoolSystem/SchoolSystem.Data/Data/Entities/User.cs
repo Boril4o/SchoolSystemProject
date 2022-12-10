@@ -18,7 +18,7 @@ namespace SchoolSystem.Data.Data.Entities
         [Range(UserMinAge, UserMaxAge)]
         public int Age { get; set; }
 
-        [Required]
-        public DateTime Birthday { get; set; }
+        //[Required]
+        //public DateTime Birthday { get; set; }
     }
 }
