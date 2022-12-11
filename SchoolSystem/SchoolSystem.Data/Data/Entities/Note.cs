@@ -18,8 +18,10 @@ namespace SchoolSystem.Data.Data.Entities
         public string Description { get; set; }
 
         [ForeignKey(nameof(Teacher))]
-        public int TeacherId { get; set; }
+        public int? TeacherId { get; set; }
         public Teacher Teacher { get; set; }
+
+        public string TeacherName { get; set; }
 
         [ForeignKey(nameof(Student))]
         public int StudentId { get; set; }

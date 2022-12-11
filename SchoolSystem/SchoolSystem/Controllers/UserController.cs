@@ -11,15 +11,12 @@ namespace SchoolSystem.Controllers
     {
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
-        private readonly ApplicationDbContext context;
 
         public UserController(UserManager<User> userManager,
-            SignInManager<User> signInManager,
-            ApplicationDbContext context)
+            SignInManager<User> signInManager)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
-            this.context = context;
         }
 
         [HttpGet]

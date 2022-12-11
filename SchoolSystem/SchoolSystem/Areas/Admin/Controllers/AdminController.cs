@@ -60,9 +60,10 @@ namespace SchoolSystem.Areas.Admin.Controllers
         [Area(AreaName)]
         [Authorize(Roles = AdminRoleName)]
         [HttpGet]
-        public IActionResult AddTeacher()
+        public async Task<IActionResult> AddTeacher()
         {
             AddTeacherViewModel model = new AddTeacherViewModel();
+            model.subjects = await adminService.GetSubjects();
 
             return View(model);
         }
@@ -78,7 +79,7 @@ namespace SchoolSystem.Areas.Admin.Controllers
                 return View(model);
             }
 
-            if (!await adminService.IsSubjectExistAsync(model.SubjectName))
+            if (!await adminService.IsSubjectExistAsync(model.SubjectId))
             {
                 ModelState.AddModelError("", SubjectDoesNotExist);
                 return View(model);
@@ -92,7 +93,7 @@ namespace SchoolSystem.Areas.Admin.Controllers
             }
 
             await adminService.AddTeacherAsync(model);
-            return View(model);
+            return View(nameof(Index));
         }
 
         [Area(AreaName)]
@@ -152,6 +153,66 @@ namespace SchoolSystem.Areas.Admin.Controllers
             }
 
             await adminService.AddSubjectAsync(model);
+            return View(nameof(Index));
+        }
+
+        [Area(AreaName)]
+        [Authorize(Roles = AdminRoleName)]
+        [HttpGet]
+        public async Task<IActionResult> AllTeachers()
+        {
+            IEnumerable<TeacherViewModel> teachers =  await adminService.AllTeachers();
+
+            return View(teachers);
+        }
+
+        [Area(AreaName)]
+        [Authorize(Roles = AdminRoleName)]
+        [HttpGet]
+        public async Task<IActionResult> EditTeacher(int id)
+        {
+            var currentModel = await adminService.GetTeacher(id);
+
+            EditTeacherViewModel model = new EditTeacherViewModel()
+            {
+                UserName = currentModel.User.UserName,
+                FirstName = currentModel.User.FirstName,
+                LastName = currentModel.User.LastName,
+                GroupId = currentModel.GroupID,
+                Salary = currentModel.Salary,
+                SubjectId = currentModel.SubjectId,
+                
+                Subjects = await adminService.GetSubjects(),
+                Groups = await adminService.GetGroups(),
+                Id = id
+            };
+
+
+            return View(model);
+        }
+
+        [Area(AreaName)]
+        [Authorize(Roles = AdminRoleName)]
+        [HttpPost]
+        public async Task<IActionResult> EditTeacher(EditTeacherViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            await adminService.EditTeacherAsync(model.Id, model);
+
+            return View(nameof(Index));
+        }
+        
+        [Area(AreaName)]
+        [Authorize(Roles = AdminRoleName)]
+        [HttpGet]
+        public async Task<IActionResult> DeleteTeacher(int id)
+        {
+            await adminService.DeleteTeacherAsync(id);
+
             return View(nameof(Index));
         }
     }

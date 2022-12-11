@@ -62,7 +62,9 @@ app.UseEndpoints(e =>
        name: "Areas",
         pattern: "{area:exists}/{controller=Admin}/{action=Index}/{id?}");
 
-    e.MapDefaultControllerRoute();
+    e.MapControllerRoute(
+         name: "default",
+         pattern: "{controller=Home}/{action=Index}/{id?}");
 
     e.MapRazorPages();
 });

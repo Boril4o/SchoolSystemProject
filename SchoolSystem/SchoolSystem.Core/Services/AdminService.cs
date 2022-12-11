@@ -48,7 +48,7 @@ namespace SchoolSystem.Core.Services
                 .Users
                 .FirstOrDefaultAsync(u => u.UserName == model.UserName);
 
-            var result = await userManager.AddToRoleAsync(user, "Teacher");
+            var result = await userManager.AddToRoleAsync(user, "Student");
 
             Student student = new Student
             {
@@ -82,11 +82,7 @@ namespace SchoolSystem.Core.Services
             Group group = await context.Groups
                  .FirstOrDefaultAsync(g => g.Number == model.GroupNumber);
 
-            Subject subject = await context
-                .Subjects
-                .FirstOrDefaultAsync(s => s.Name == model.SubjectName);
-
-            var result = await userManager.AddToRoleAsync(user, "Student");
+            var result = await userManager.AddToRoleAsync(user, "Teacher");
 
             Teacher teacher;
 
@@ -97,8 +93,7 @@ namespace SchoolSystem.Core.Services
                     User = user,
                     UserId = user.Id,
                     Salary = model.Salary,
-                    Subject = subject,
-                    SubjectId = subject.Id
+                    SubjectId = model.SubjectId
                 };
             }
             else
@@ -110,8 +105,7 @@ namespace SchoolSystem.Core.Services
                     Salary = model.Salary,
                     Group = group,
                     GroupID = group.Id,
-                    Subject = subject,
-                    SubjectId = subject.Id
+                    SubjectId = model.SubjectId
                 };
             }
          
@@ -119,13 +113,89 @@ namespace SchoolSystem.Core.Services
             await context.SaveChangesAsync();
         }
 
+        public async Task<IEnumerable<TeacherViewModel>> AllTeachers()
+            => await context
+            .Teachers
+            .Select(t => new TeacherViewModel
+            {
+                FirstName = t.User.FirstName,
+                LastName = t.User.LastName,
+                UserName = t.User.UserName,
+                Group = t.Group == null ? "none" : t.Group.Number,
+                Subject = t.Subject.Name,
+                Salary = t.Salary,
+                Id = t.Id,
+            })
+            .ToArrayAsync();
+
+        public async Task DeleteTeacherAsync(int id)
+        {
+            Teacher t = await GetTeacher(id);
+
+            var notes = context
+                .Notes
+                .Where(n => n.TeacherId == t.Id)
+                .Select(n => new Note
+                {
+                    Id = n.Id,
+                    Title = n.Title,
+                    Description = n.Description,
+                    StudentId = n.StudentId,
+                    SubjectId = n.SubjectId,
+                    TeacherId = null,
+                });
+
+            var grades = context
+                .Grades
+                .Where(g => g.TeacherId == t.Id)
+                .Select(g => new Grade
+                {
+                    Id = g.Id,
+                    Number = g.Number,
+                    StudentId = g.StudentId,
+                    SubjectId = g.StudentId,
+                    TeacherId = null,
+                });
+
+            context.Teachers.Remove(t);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task EditTeacherAsync(int id, EditTeacherViewModel model)
+        {
+            Teacher teacher = await GetTeacher(id);
+
+            teacher.User.UserName = model.UserName;
+            teacher.User.FirstName = model.FirstName;
+            teacher.User.LastName = model.LastName;
+            teacher.GroupID = model.GroupId;
+            teacher.SubjectId = model.SubjectId;
+            teacher.Salary = model.Salary;
+
+            await context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<Group>> GetGroups()
+            => await context.Groups.ToArrayAsync();
+
+        public async Task<IEnumerable<Subject>> GetSubjects()
+         => await context.Subjects.ToListAsync<Subject>();
+
+        public async Task<Teacher> GetTeacher(int id)
+        => await context.Teachers.Include(t => t.User).Where(t => t.Id == id).FirstAsync();
+
         public async Task<bool> IsGroupExistAsync(string number)
         => await context.Groups.AnyAsync(g => g.Number == number);
 
         public async Task<bool> IsSubjectExistAsync(string subjectName)
         => await context.Subjects.AnyAsync(s => s.Name == subjectName);
 
+        public async Task<bool> IsSubjectExistAsync(int id)
+         => await context.Subjects.FindAsync(id) == null;
+
         public async Task<bool> IsUserNameExistAsync(string username)
         => await context.Users.AnyAsync(u => u.UserName == username);
+
+        
     }
 }
