@@ -1,0 +1,40 @@
+﻿@using SchoolSystem.Core.Models.Teacher
+@model AddTeacherViewModel;
+@{
+    ViewData["Title"] = "Add teacher";
+}
+
+<h1 class="text-center">@ViewData["Title"]</h1>
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+        <section>
+            <form id="account" method="post">
+                <hr />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="text-center mb-3">
+                    <label asp-for="@Model.UserName" class="form-label">Username</label>
+                    <input asp-for="@Model.UserName" class="form-control" autocomplete="UserName" aria-required="true" />
+                    <span asp-validation-for="@Model.UserName" class="text-danger"></span>
+                </div>
+                <div class="text-center mb-3">
+                    <label asp-for="@Model.GroupNumber" class="form-label">Group Number</label>
+                    <input asp-for="@Model.GroupNumber" class="form-control" autocomplete="Group-Number" aria-required="true" />
+                    <span asp-validation-for="@Model.GroupNumber" class="text-danger"></span>
+                </div>
+                <div class="text-center mb-3">
+                    <label asp-for="@Model.Salary" class="form-label"></label>
+                    <input asp-for="@Model.Salary" class="form-control" autocomplete="Salary" aria-required="true" />
+                    <span asp-validation-for="@Model.Salary" class="text-danger"></span>
+                </div>
+                 <div class="text-center mb-3">
+                    <label asp-for="@Model.SubjectName" class="form-label">Subject Name</label>
+                    <input asp-for="@Model.SubjectName" class="form-control" autocomplete="Subject-Name" aria-required="true" />
+                    <span asp-validation-for="@Model.SubjectName" class="text-danger"></span>
+                </div>
+                <div class="text-center">
+                    <button id="login-submit" type="submit" class="btn btn-primary">Log in</button>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>
