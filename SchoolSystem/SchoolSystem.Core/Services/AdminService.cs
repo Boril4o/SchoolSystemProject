@@ -1,6 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using SchoolSystem.Core.Contracts;
+using SchoolSystem.Core.Models.Group;
 using SchoolSystem.Core.Models.Student;
+using SchoolSystem.Core.Models.Subject;
 using SchoolSystem.Core.Models.Teacher;
 using SchoolSystem.Data.Data;
 using SchoolSystem.Data.Data.Entities;
@@ -15,10 +18,25 @@ namespace SchoolSystem.Core.Services
     public class AdminService : IAdminService
     {
         private readonly ApplicationDbContext context;
+        private readonly UserManager<User> userManager;
 
-        public AdminService(ApplicationDbContext context)
+        public AdminService(ApplicationDbContext context,
+            UserManager<User> userManager)
         {
             this.context = context;
+            this.userManager = userManager;
+        }
+
+        public async Task AddGroupAsync(AddGroupViewModel model)
+        {
+            Group group = new Group
+            {
+                Number = model.Number,
+                MaxPeople = model.MaxPeople
+            };
+
+            await context.Groups.AddAsync(group);
+            await context.SaveChangesAsync();
         }
 
         public async Task AddStudentAsync(AddStudentViewModel model)
@@ -30,6 +48,8 @@ namespace SchoolSystem.Core.Services
                 .Users
                 .FirstOrDefaultAsync(u => u.UserName == model.UserName);
 
+            var result = await userManager.AddToRoleAsync(user, "Teacher");
+
             Student student = new Student
             {
                 UserId = user.Id,
@@ -39,6 +59,17 @@ namespace SchoolSystem.Core.Services
             };
 
             await context.AddAsync(student);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task AddSubjectAsync(AddSubjectViewModel model)
+        {
+            Subject subject = new Subject
+            {
+                Name = model.Name
+            };
+        
+            await context.Subjects.AddAsync(subject);
             await context.SaveChangesAsync();
         }
 
@@ -54,6 +85,8 @@ namespace SchoolSystem.Core.Services
             Subject subject = await context
                 .Subjects
                 .FirstOrDefaultAsync(s => s.Name == model.SubjectName);
+
+            var result = await userManager.AddToRoleAsync(user, "Student");
 
             Teacher teacher;
 

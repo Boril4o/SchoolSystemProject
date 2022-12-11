@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchoolSystem.Core.Contracts;
+using SchoolSystem.Core.Models.Group;
 using SchoolSystem.Core.Models.Student;
+using SchoolSystem.Core.Models.Subject;
 using SchoolSystem.Core.Models.Teacher;
 using static SchoolSystem.Areas.Admin.AdminConstans;
+using static SchoolSystem.Areas.Admin.Constants.ErrorConstants;
 
 namespace SchoolSystem.Areas.Admin.Controllers
 {
@@ -40,13 +43,13 @@ namespace SchoolSystem.Areas.Admin.Controllers
         {
             if (!await adminService.IsUserNameExistAsync(model.UserName))
             {
-                ModelState.AddModelError("", "Username does not exists");
+                ModelState.AddModelError("", UsernameDoesNotExist);
                 return View(model);
             }
 
-            if(!await adminService.IsGroupExistAsync(model.GroupNumber))
+            if (!await adminService.IsGroupExistAsync(model.GroupNumber))
             {
-                ModelState.AddModelError("", "Group does not exists");
+                ModelState.AddModelError("", GroupDoesNotExist);
                 return View(model);
             }
 
@@ -57,7 +60,7 @@ namespace SchoolSystem.Areas.Admin.Controllers
         [Area(AreaName)]
         [Authorize(Roles = AdminRoleName)]
         [HttpGet]
-        public async Task<IActionResult> AddTeacher()
+        public IActionResult AddTeacher()
         {
             AddTeacherViewModel model = new AddTeacherViewModel();
 
@@ -71,25 +74,85 @@ namespace SchoolSystem.Areas.Admin.Controllers
         {
             if (!await adminService.IsUserNameExistAsync(model.UserName))
             {
-                ModelState.AddModelError("", "Username does not exists");
+                ModelState.AddModelError("", UsernameDoesNotExist);
                 return View(model);
             }
 
             if (!await adminService.IsSubjectExistAsync(model.SubjectName))
             {
-                ModelState.AddModelError("", "Subject does not exists");
+                ModelState.AddModelError("", SubjectDoesNotExist);
                 return View(model);
             }
 
             if (model.GroupNumber != null &&
                 !await adminService.IsGroupExistAsync(model.GroupNumber))
             {
-                ModelState.AddModelError("", "Group does not exists");
+                ModelState.AddModelError("", GroupDoesNotExist);
                 return View(model);
             }
 
             await adminService.AddTeacherAsync(model);
             return View(model);
+        }
+
+        [Area(AreaName)]
+        [Authorize(Roles = AdminRoleName)]
+        [HttpGet]
+        public IActionResult AddGroup()
+        {
+            AddGroupViewModel model = new AddGroupViewModel();
+
+            return View(model);
+        }
+
+        [Area(AreaName)]
+        [Authorize(Roles = AdminRoleName)]
+        [HttpPost]
+        public async Task<IActionResult> AddGroup(AddGroupViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            if (await adminService.IsGroupExistAsync(model.Number))
+            {
+                ModelState.AddModelError("", GroupAlreadyExist);
+                return View(model);
+            }
+
+            await adminService.AddGroupAsync(model);
+            return RedirectToAction(nameof(Index));
+        }
+        
+        [Area(AreaName)]
+        [Authorize(Roles = AdminRoleName)]
+        [HttpGet]
+        public IActionResult AddSubject()
+        {
+            var model = new AddSubjectViewModel();
+
+            return View(model);
+        }
+
+        [Area(AreaName)]
+        [Authorize(Roles = AdminRoleName)]
+        [HttpPost]
+        public async Task<IActionResult> AddSubject(AddSubjectViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            if (await adminService.IsSubjectExistAsync(model.Name))
+            {
+                ModelState.AddModelError("", SubjectAlreadyExist);
+                return View(model);
+            }
+
+            await adminService.AddSubjectAsync(model);
+            return View(nameof(Index));
         }
     }
 }
