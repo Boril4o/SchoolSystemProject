@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SchoolSystem.Models;
 using System.Diagnostics;
+using static SchoolSystem.Areas.Admin.AdminConstans;
 
 namespace SchoolSystem.Controllers
 {
@@ -15,6 +16,10 @@ namespace SchoolSystem.Controllers
 
         public IActionResult Index()
         {
+            if (User.IsInRole(AdminRoleName))
+            {
+                return RedirectToAction("Index", "Admin", new { area = "Admin" });
+            }
             return View();
         }
 

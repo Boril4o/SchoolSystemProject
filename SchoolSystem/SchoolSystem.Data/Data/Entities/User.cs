@@ -9,6 +9,10 @@ namespace SchoolSystem.Data.Data.Entities
     {
         [Required]
         [MaxLength(UserFirstNameMaxLength)]
+        public override string UserName { get; set; }
+        
+        [Required]
+        [MaxLength(UserFirstNameMaxLength)]
         public string FirstName { get; set; }
 
         [Required]

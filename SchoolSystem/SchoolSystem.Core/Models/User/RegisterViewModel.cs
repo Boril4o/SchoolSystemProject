@@ -9,6 +9,11 @@ namespace SchoolSystem.Core.Models.User
         [Required]
         [MaxLength(UserFirstNameMaxLength)]
         [MinLength(UserFirstNameMinLength)]
+        public string UserName { get; set; }
+
+        [Required]
+        [MaxLength(UserFirstNameMaxLength)]
+        [MinLength(UserFirstNameMinLength)]
         public string FirstName { get; set; }
 
         [Required]

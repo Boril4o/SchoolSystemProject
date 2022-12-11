@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SchoolSystem.Core.Models.User;
+using SchoolSystem.Data.Data;
 using SchoolSystem.Data.Data.Entities;
 
 namespace SchoolSystem.Controllers
@@ -10,12 +11,15 @@ namespace SchoolSystem.Controllers
     {
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
+        private readonly ApplicationDbContext context;
 
         public UserController(UserManager<User> userManager,
-            SignInManager<User> signInManager)
+            SignInManager<User> signInManager,
+            ApplicationDbContext context)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.context = context;
         }
 
         [HttpGet]
@@ -43,6 +47,7 @@ namespace SchoolSystem.Controllers
 
             var user = new User
             {
+                UserName = model.UserName,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 Email = model.Email,

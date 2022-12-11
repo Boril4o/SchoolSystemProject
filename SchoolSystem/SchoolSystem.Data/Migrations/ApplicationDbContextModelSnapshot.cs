@@ -8,7 +8,7 @@ using SchoolSystem.Data.Data;
 
 #nullable disable
 
-namespace SchoolSystem.Data.Migrations
+namespace SchoolSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -332,9 +332,6 @@ namespace SchoolSystem.Data.Migrations
 
                     b.Property<int>("Age")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("Birthday")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
