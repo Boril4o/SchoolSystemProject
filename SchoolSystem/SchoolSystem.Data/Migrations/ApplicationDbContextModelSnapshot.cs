@@ -198,6 +198,9 @@ namespace SchoolSystem.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("MaxPeople")
+                        .HasColumnType("int");
+
                     b.Property<string>("Number")
                         .IsRequired()
                         .HasMaxLength(10)
@@ -384,6 +387,7 @@ namespace SchoolSystem.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 

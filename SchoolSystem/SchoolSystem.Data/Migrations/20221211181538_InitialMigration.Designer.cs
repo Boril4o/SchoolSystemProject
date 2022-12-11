@@ -12,7 +12,7 @@ using SchoolSystem.Data.Data;
 namespace SchoolSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221211115800_InitialMigration")]
+    [Migration("20221211181538_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -200,6 +200,9 @@ namespace SchoolSystem.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("MaxPeople")
+                        .HasColumnType("int");
+
                     b.Property<string>("Number")
                         .IsRequired()
                         .HasMaxLength(10)
@@ -386,6 +389,7 @@ namespace SchoolSystem.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 

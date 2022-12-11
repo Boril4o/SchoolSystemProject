@@ -12,10 +12,13 @@ namespace SchoolSystem.Data.Data.Constants
         public const int SubjectNameMaxLength = 20;
         public const int SubjectNameMinLength = 3;
 
-        //Class
-        public const int ClassNumberMaxLength = 10;
-        public const int ClassNumberMinLength = 2;
-        
+        //Group
+        public const int GroupNumberMaxLength = 10;
+        public const int GroupNumberMinLength = 2;
+
+        public const int GroupMaxPeople = 50;
+        public const int GroupMinPeople = 10;
+
         //User
         public const int UserFirstNameMaxLength = 50;
         public const int UserFirstNameMinLength = 1;

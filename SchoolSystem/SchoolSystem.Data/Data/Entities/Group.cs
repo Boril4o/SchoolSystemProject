@@ -15,12 +15,15 @@ namespace SchoolSystem.Data.Data.Entities
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(ClassNumberMaxLength)]
+        [MaxLength(GroupNumberMaxLength)]
         public string Number { get; set; }
 
         //[ForeignKey(nameof(Teacher))]
         //public int TeacherId { get; set; }
         //public Teacher Teacher { get; set; }
+
+        [Range(GroupMinPeople, GroupMaxPeople)]
+        public int MaxPeople { get; set; }
 
         public List<Student> Students { get; set; }
     }
