@@ -8,5 +8,7 @@ namespace SchoolSystem.Core.Models.Subject
         [Required]
         [MaxLength(SubjectNameMaxLength)]
         public string Name { get; set; }
+
+        public int Id { get; set; }
     }
 }

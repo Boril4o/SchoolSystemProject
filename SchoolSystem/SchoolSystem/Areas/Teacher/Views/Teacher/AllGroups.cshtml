@@ -1,0 +1,27 @@
+﻿@using SchoolSystem.Core.Models.Group
+@model IEnumerable<GroupViewModel>
+@{
+	ViewBag.Title = "All Groups";
+}
+<h2 class="text-center">@ViewBag.Title</h2> <hr />
+<table class="table table-striped">
+	<thead>
+		<tr> 
+			<th><label>Number</label></th>
+			<th><label>MaxPeople</label></th>
+		</tr>
+		</thead> 
+		<tbody>
+			@foreach (var g in Model)
+			{ 
+				<tr>
+					<td><label>@g.Number</label></td>
+					<td><label>@g.People/@g.MaxPeople</label></td> 
+					<td>		
+						<a asp-area="Admin" asp-controller="Admin" asp-action="EditTeacher" class="btn btn-primary btn-lg" asp-route-Id="@g.Id">See Students</a>
+					</td>
+				</tr>
+			} 
+		</tbody> 
+</table>
+

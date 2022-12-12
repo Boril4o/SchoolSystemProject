@@ -366,7 +366,8 @@ namespace SchoolSystem.Areas.Admin.Controllers
             Subject s = await adminService.GetSubject(id);
             EditSubjectViewModel model = new EditSubjectViewModel
             {
-                Name = s.Name
+                Name = s.Name,
+                Id = id
             };
 
             return View(model);
@@ -375,7 +376,7 @@ namespace SchoolSystem.Areas.Admin.Controllers
         [Area(AreaName)]
         [Authorize(Roles = AdminRoleName)]
         [HttpPost]
-        public async Task<IActionResult> EditStubject(EditSubjectViewModel model)
+        public async Task<IActionResult> EditSubject(EditSubjectViewModel model)
         {
             if (!ModelState.IsValid)
             {

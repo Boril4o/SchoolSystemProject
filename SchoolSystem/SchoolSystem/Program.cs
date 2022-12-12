@@ -28,6 +28,7 @@ builder.Services.AddDefaultIdentity<User>(options =>
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddScoped<ITeacherService, TeacherService>();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -61,6 +62,10 @@ app.UseEndpoints(e =>
    e.MapControllerRoute(
        name: "Areas",
         pattern: "{area:exists}/{controller=Admin}/{action=Index}/{id?}");
+
+    e.MapControllerRoute(
+       name: "Teacher",
+        pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
     e.MapControllerRoute(
          name: "default",

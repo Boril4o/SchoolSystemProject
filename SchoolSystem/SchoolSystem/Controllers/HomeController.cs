@@ -2,6 +2,7 @@
 using SchoolSystem.Models;
 using System.Diagnostics;
 using static SchoolSystem.Areas.Admin.AdminConstans;
+using static SchoolSystem.Areas.Teacher.TeacherConstants;
 
 namespace SchoolSystem.Controllers
 {
@@ -19,6 +20,10 @@ namespace SchoolSystem.Controllers
             if (User.IsInRole(AdminRoleName))
             {
                 return RedirectToAction("Index", "Admin", new { area = "Admin" });
+            }
+            else if (User.IsInRole(TeacherRoleName))
+            {
+                return RedirectToAction("Index", "Home", new { area = "Teacher" });
             }
             return View();
         }

@@ -291,10 +291,7 @@ namespace SchoolSystem.Core.Services
 
         public async Task EditSubject(EditSubjectViewModel model)
         {
-            Subject s = await context
-                .Subjects
-                .Where(s => s.Name == model.Name)
-                .FirstAsync();
+            Subject s = await GetSubject(model.Id);
 
             if (s == null)
             {
