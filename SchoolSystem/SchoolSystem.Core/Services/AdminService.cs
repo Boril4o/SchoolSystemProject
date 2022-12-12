@@ -7,11 +7,7 @@ using SchoolSystem.Core.Models.Subject;
 using SchoolSystem.Core.Models.Teacher;
 using SchoolSystem.Data.Data;
 using SchoolSystem.Data.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using static SchoolSystem.Core.Constraints.ErrorConstants;
 
 namespace SchoolSystem.Core.Services
 {
@@ -29,6 +25,11 @@ namespace SchoolSystem.Core.Services
 
         public async Task AddGroupAsync(AddGroupViewModel model)
         {
+            if (await IsGroupExistAsync(model.Number))
+            {
+                throw new ArgumentException(GroupAlreadyExist);
+            }
+
             Group group = new Group
             {
                 Number = model.Number,
@@ -41,6 +42,16 @@ namespace SchoolSystem.Core.Services
 
         public async Task AddStudentAsync(AddStudentViewModel model)
         {
+            if (!await IsUserNameExistAsync(model.UserName))
+            {
+                throw new ArgumentException(UsernameDoesNotExist);
+            }
+
+            if (!await IsGroupExistAsync(model.GroupNumber))
+            {
+                throw new ArgumentException(GroupDoesNotExist);
+            }
+
             Group group = await context.Groups
                  .FirstOrDefaultAsync(g => g.Number == model.GroupNumber);
 
@@ -64,17 +75,38 @@ namespace SchoolSystem.Core.Services
 
         public async Task AddSubjectAsync(AddSubjectViewModel model)
         {
+            if (await IsSubjectExistAsync(model.Name))
+            {
+                throw new ArgumentException(SubjectAlreadyExist);
+            }
+
             Subject subject = new Subject
             {
                 Name = model.Name
             };
-        
+
             await context.Subjects.AddAsync(subject);
             await context.SaveChangesAsync();
         }
 
         public async Task AddTeacherAsync(AddTeacherViewModel model)
         {
+            if (!await IsUserNameExistAsync(model.UserName))
+            {
+                throw new ArgumentException(UsernameDoesNotExist);
+            }
+
+            if (!await IsSubjectExistAsync(model.SubjectId))
+            {
+                throw new ArgumentException(SubjectDoesNotExist);
+            }
+
+            if (model.GroupNumber != null &&
+                !await IsGroupExistAsync(model.GroupNumber))
+            {
+                throw new ArgumentException(GroupDoesNotExist);
+            }
+
             User user = await context
                 .Users
                 .FirstOrDefaultAsync(u => u.UserName == model.UserName);
@@ -108,10 +140,23 @@ namespace SchoolSystem.Core.Services
                     SubjectId = model.SubjectId
                 };
             }
-         
+
             await context.AddAsync(teacher);
             await context.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<StudentViewModel>> AllStudents()
+         => await context
+            .Students
+            .Select(s => new StudentViewModel
+            {
+                FirstName = s.User.FirstName,
+                LastName = s.User.LastName,
+                Group = s.Group.Number,
+                Id = s.Id,
+                UserName = s.User.UserName
+            })
+            .ToListAsync();
 
         public async Task<IEnumerable<TeacherViewModel>> AllTeachers()
             => await context
@@ -127,6 +172,14 @@ namespace SchoolSystem.Core.Services
                 Id = t.Id,
             })
             .ToArrayAsync();
+
+        public async Task DeleteStudent(int id)
+        {
+            Student s = await GetStudent(id);
+
+            context.Students.Remove(s);
+            await context.SaveChangesAsync();
+        }
 
         public async Task DeleteTeacherAsync(int id)
         {
@@ -161,6 +214,27 @@ namespace SchoolSystem.Core.Services
             await context.SaveChangesAsync();
         }
 
+        public async Task EditStudent(EditStudentViewModel model)
+        {
+            if (await IsUserNameExistAsync(model.UserName))
+            {
+                throw new ArgumentException(UserNameExist);
+            }
+
+            Student s = await GetStudent(model.Id);
+            if (s == null)
+            {
+                throw new ArgumentException(UserDoesNotExist);
+            }
+
+            s.User.FirstName = model.FirstName;
+            s.User.LastName = model.LastName;
+            s.User.UserName = model.UserName;
+            s.GroupId = model.GroupID;
+
+            await context.SaveChangesAsync();
+        }
+
         public async Task EditTeacherAsync(int id, EditTeacherViewModel model)
         {
             Teacher teacher = await GetTeacher(id);
@@ -178,6 +252,9 @@ namespace SchoolSystem.Core.Services
         public async Task<IEnumerable<Group>> GetGroups()
             => await context.Groups.ToArrayAsync();
 
+        public async Task<Student> GetStudent(int id)
+          => await context.Students.Include(s => s.User).Where(s => s.Id == id).FirstOrDefaultAsync();
+
         public async Task<IEnumerable<Subject>> GetSubjects()
          => await context.Subjects.ToListAsync<Subject>();
 
@@ -191,11 +268,10 @@ namespace SchoolSystem.Core.Services
         => await context.Subjects.AnyAsync(s => s.Name == subjectName);
 
         public async Task<bool> IsSubjectExistAsync(int id)
-         => await context.Subjects.FindAsync(id) == null;
+         => await context.Subjects.FindAsync(id) != null;
 
         public async Task<bool> IsUserNameExistAsync(string username)
         => await context.Users.AnyAsync(u => u.UserName == username);
 
-        
     }
 }

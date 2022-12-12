@@ -1,0 +1,33 @@
+﻿@using SchoolSystem.Core.Models.Student
+@model IEnumerable<StudentViewModel>
+@{
+	ViewBag.Title = "All Students";
+}
+<h2 class="text-center">@ViewBag.Title</h2> <hr />
+<table class="table table-striped">
+	<thead>
+		<tr> 
+			<th><label>UserName</label></th>
+			<th><label>First Name</label></th>
+			<th><label>Last Name</label></th>
+			<th><label>Group</label></th>
+			<th><label>Edit/Delete</label></th>
+		</tr>
+		</thead> 
+		<tbody>
+			@foreach (var s in Model)
+			{ 
+				<tr>
+					<td><label>@s.UserName</label></td>
+					<td><label>@s.FirstName</label></td> 
+					<td><label>@s.LastName</label></td>
+					<td><label>@s.Group</label></td> 
+					<td>
+						<a  asp-area="Admin" asp-controller="Admin" asp-action="EditStudent" class="btn btn-primary btn-lg" asp-route-Id="@s.Id">Edit</a>
+						<a onclick="return confirm('Are you sure you want to delete student:@s.FirstName')" asp-area="Admin" asp-controller="Admin" asp-action="DeleteStudent" type="submit"*@ class="btn btn-primary" asp-route-Id="@s.Id">Delete</a>
+					</td>
+				</tr>
+			} 
+		</tbody> 
+</table>
+

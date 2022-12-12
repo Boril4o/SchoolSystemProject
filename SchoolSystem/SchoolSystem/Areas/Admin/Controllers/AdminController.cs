@@ -5,8 +5,8 @@ using SchoolSystem.Core.Models.Group;
 using SchoolSystem.Core.Models.Student;
 using SchoolSystem.Core.Models.Subject;
 using SchoolSystem.Core.Models.Teacher;
+using SchoolSystem.Data.Data.Entities;
 using static SchoolSystem.Areas.Admin.AdminConstans;
-using static SchoolSystem.Areas.Admin.Constants.ErrorConstants;
 
 namespace SchoolSystem.Areas.Admin.Controllers
 {
@@ -41,19 +41,24 @@ namespace SchoolSystem.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> AddStudent(AddStudentViewModel model)
         {
-            if (!await adminService.IsUserNameExistAsync(model.UserName))
+            try
             {
-                ModelState.AddModelError("", UsernameDoesNotExist);
+                await adminService.AddStudentAsync(model);
+            }
+            catch (Exception e)
+            {
+                if (e.GetType().Name == nameof(ArgumentException))
+                {
+                    ModelState.AddModelError("", e.Message);
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Error");
+                }
                 return View(model);
             }
 
-            if (!await adminService.IsGroupExistAsync(model.GroupNumber))
-            {
-                ModelState.AddModelError("", GroupDoesNotExist);
-                return View(model);
-            }
-
-            await adminService.AddStudentAsync(model);
+            
             return View(nameof(Index));
         }
 
@@ -73,26 +78,24 @@ namespace SchoolSystem.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> AddTeacher(AddTeacherViewModel model)
         {
-            if (!await adminService.IsUserNameExistAsync(model.UserName))
+            try
             {
-                ModelState.AddModelError("", UsernameDoesNotExist);
+                await adminService.AddTeacherAsync(model);
+            }
+            catch (Exception e)
+            {
+                if (e.GetType().Name == nameof(ArgumentException))
+                {
+                    ModelState.AddModelError("", e.Message);
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Error");
+                }
+                model.subjects = await adminService.GetSubjects();
                 return View(model);
             }
 
-            if (!await adminService.IsSubjectExistAsync(model.SubjectId))
-            {
-                ModelState.AddModelError("", SubjectDoesNotExist);
-                return View(model);
-            }
-
-            if (model.GroupNumber != null &&
-                !await adminService.IsGroupExistAsync(model.GroupNumber))
-            {
-                ModelState.AddModelError("", GroupDoesNotExist);
-                return View(model);
-            }
-
-            await adminService.AddTeacherAsync(model);
             return View(nameof(Index));
         }
 
@@ -116,13 +119,23 @@ namespace SchoolSystem.Areas.Admin.Controllers
                 return View(model);
             }
 
-            if (await adminService.IsGroupExistAsync(model.Number))
+            try
             {
-                ModelState.AddModelError("", GroupAlreadyExist);
+                await adminService.AddGroupAsync(model);
+            }
+            catch (Exception e)
+            {
+                if (e.GetType().Name == nameof(ArgumentException))
+                {
+                    ModelState.AddModelError("", e.Message);
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Error");
+                }
                 return View(model);
             }
 
-            await adminService.AddGroupAsync(model);
             return RedirectToAction(nameof(Index));
         }
         
@@ -146,13 +159,24 @@ namespace SchoolSystem.Areas.Admin.Controllers
                 return View(model);
             }
 
-            if (await adminService.IsSubjectExistAsync(model.Name))
+            try
             {
-                ModelState.AddModelError("", SubjectAlreadyExist);
+                await adminService.AddSubjectAsync(model);
+
+            }
+            catch (Exception e)
+            {
+                if (e.GetType().Name == nameof(ArgumentException))
+                {
+                    ModelState.AddModelError("", e.Message);
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Error");
+                }
                 return View(model);
             }
 
-            await adminService.AddSubjectAsync(model);
             return View(nameof(Index));
         }
 
@@ -196,6 +220,9 @@ namespace SchoolSystem.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> EditTeacher(EditTeacherViewModel model)
         {
+            model.Subjects = await adminService.GetSubjects();
+            model.Groups = await adminService.GetGroups();
+
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -203,7 +230,7 @@ namespace SchoolSystem.Areas.Admin.Controllers
 
             await adminService.EditTeacherAsync(model.Id, model);
 
-            return View(nameof(Index));
+            return View(nameof(AllTeachers), await adminService.AllTeachers());
         }
         
         [Area(AreaName)]
@@ -214,6 +241,75 @@ namespace SchoolSystem.Areas.Admin.Controllers
             await adminService.DeleteTeacherAsync(id);
 
             return View(nameof(Index));
+        }
+
+        [Area(AreaName)]
+        [Authorize(Roles = AdminRoleName)]
+        [HttpGet]
+        public async Task<IActionResult> AllStudents()
+        {
+            return View(await adminService.AllStudents());
+        }
+
+        [Area(AreaName)]
+        [Authorize(Roles = AdminRoleName)]
+        [HttpGet]
+        public async Task<IActionResult> EditStudent(int id)
+        {
+            Student s = await adminService.GetStudent(id);
+            EditStudentViewModel model = new EditStudentViewModel
+            {
+                FirstName = s.User.FirstName,
+                GroupID = s.GroupId,
+                Groups = await adminService.GetGroups(),
+                Id = id,
+                LastName = s.User.LastName,
+                UserName = s.User.UserName
+            };
+
+            return View(model);
+        }
+
+        [Area(AreaName)]
+        [Authorize(Roles = AdminRoleName)]
+        [HttpPost]
+        public async Task<IActionResult> EditStudent(EditStudentViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                model.Groups = await adminService.GetGroups();
+                return View(model);
+            }
+
+            try
+            {
+                await adminService.EditStudent(model);
+            }
+            catch (Exception e)
+            {
+                if (e.GetType().Name == nameof(ArgumentException))
+                {
+                    ModelState.AddModelError("", e.Message);
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Error");
+                }
+
+                model.Groups = await adminService.GetGroups();
+                return View(model);
+            }
+
+            return View(nameof(AllStudents), await adminService.AllStudents());
+        }
+
+        [Area(AreaName)]
+        [Authorize(Roles = AdminRoleName)]
+        [HttpGet]
+        public async Task<IActionResult> DeleteStudent(int id)
+        {
+            await adminService.DeleteStudent(id);
+            return View(nameof(AllStudents), await adminService.AllStudents());
         }
     }
 }

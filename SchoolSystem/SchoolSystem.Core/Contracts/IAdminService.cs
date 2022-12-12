@@ -35,5 +35,13 @@ namespace SchoolSystem.Core.Contracts
         public Task<Teacher> GetTeacher(int id);
 
         public Task DeleteTeacherAsync(int id);
+
+        public Task<IEnumerable<StudentViewModel>> AllStudents();
+
+        public Task EditStudent(EditStudentViewModel model);
+
+        public Task<Student> GetStudent(int id);
+
+        public Task DeleteStudent(int id);
     }
 }
