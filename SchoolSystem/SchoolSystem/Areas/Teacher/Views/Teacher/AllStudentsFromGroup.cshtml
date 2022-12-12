@@ -1,0 +1,29 @@
+﻿@using SchoolSystem.Core.Models.Student
+@model IEnumerable<StudentViewModel>
+@{
+	ViewBag.Title = "All Students";
+}
+<h2 class="text-center">@ViewBag.Title</h2> <hr />
+<table class="table table-striped">
+	<thead>
+		<tr> 
+			<th><label>FirstName</label></th>
+			<th><label>LastName</label></th>
+			<th><label>Group</label></th>
+		</tr>
+		</thead> 
+		<tbody>
+			@foreach (var s in Model)
+			{ 
+				<tr>
+					<td><label>@s.FirstName</label></td>
+					<td><label>@s.LastName</label></td> 
+					<td><label>@s.Group</label></td> 
+					<td>		
+						<a asp-area="Teacher" asp-controller="Teacher" asp-action="AddGrade" class="btn btn-primary btn-lg" asp-route-Id="@s.Id">Add Grade</a>
+					</td>
+				</tr>
+			} 
+		</tbody> 
+</table>
+

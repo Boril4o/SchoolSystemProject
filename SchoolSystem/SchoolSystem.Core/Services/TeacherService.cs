@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using static SchoolSystem.Core.Constraints.ErrorConstants;
 using Microsoft.EntityFrameworkCore;
 using SchoolSystem.Core.Contracts;
+using SchoolSystem.Core.Models.Grade;
 using SchoolSystem.Core.Models.Group;
 using SchoolSystem.Core.Models.Student;
 using SchoolSystem.Data.Data;
@@ -17,6 +18,33 @@ namespace SchoolSystem.Core.Services
             this.context = context;
         }
 
+        public async Task AddGrade(AddGradeViewModel model)
+        {
+            User u = await context.Users.Where(u => u.UserName == model.TeacherUserName).FirstOrDefaultAsync();
+            if (u == null)
+            {
+                throw new ArgumentException(UsernameDoesNotExist);
+            }
+
+            Teacher t = await context.Teachers.Where(t => t.UserId == u.Id).FirstOrDefaultAsync();
+            if (t == null)
+            {
+                throw new ArgumentException(TeacherDoesNotExist);
+            }
+
+            Grade g = new Grade()
+            {
+                Number = model.Number,
+                StudentId = model.StudentId,
+                SubjectId = model.SubjectId,
+                TeacherId = t.Id,
+                TeacherName = u.FirstName + " " + u.LastName
+            };
+
+            await context.Grades.AddAsync(g);
+            await context.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<GroupViewModel>> AllGroups()
          => await context.Groups.Select(g => new GroupViewModel
         {
@@ -27,7 +55,7 @@ namespace SchoolSystem.Core.Services
         })
             .ToListAsync();
 
-        public async Task<IEnumerable<StudentViewModel>> AllStudents(int groupId)
+        public async Task<IEnumerable<StudentViewModel>> AllStudentsFromGroup(int groupId)
             => await context
             .Students
             .Where(s => s.GroupId == groupId)
@@ -39,5 +67,8 @@ namespace SchoolSystem.Core.Services
                 Group = s.Group.Number,
             })
             .ToListAsync();
+
+        public async Task<IEnumerable<Subject>> GetSubjects()
+         => await context.Subjects.ToListAsync();
     }
 }

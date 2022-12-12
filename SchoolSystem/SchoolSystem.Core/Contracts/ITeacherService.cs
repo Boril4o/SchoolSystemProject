@@ -1,5 +1,7 @@
-﻿using SchoolSystem.Core.Models.Group;
+﻿using SchoolSystem.Core.Models.Grade;
+using SchoolSystem.Core.Models.Group;
 using SchoolSystem.Core.Models.Student;
+using SchoolSystem.Data.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +14,10 @@ namespace SchoolSystem.Core.Contracts
     {
         public Task<IEnumerable<GroupViewModel>> AllGroups();
 
-        public Task<IEnumerable<StudentViewModel>> AllStudents(int groupId);
+        public Task<IEnumerable<StudentViewModel>> AllStudentsFromGroup(int groupId);
+
+        public Task AddGrade(AddGradeViewModel model);
+
+        public Task<IEnumerable<Subject>> GetSubjects();
     }
 }

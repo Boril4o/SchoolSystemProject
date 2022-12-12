@@ -10,4 +10,8 @@
     <ProjectReference Include="..\SchoolSystem.Data\SchoolSystem.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\Note\" />
+  </ItemGroup>
+
 </Project>

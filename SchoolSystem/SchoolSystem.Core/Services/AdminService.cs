@@ -30,7 +30,7 @@ namespace SchoolSystem.Core.Services
                 throw new ArgumentException(GroupAlreadyExist);
             }
 
-            Group group = new Group
+            Group group = new()
             {
                 Number = model.Number,
                 MaxPeople = model.MaxPeople
@@ -61,7 +61,7 @@ namespace SchoolSystem.Core.Services
 
             var result = await userManager.AddToRoleAsync(user, "Student");
 
-            Student student = new Student
+            Student student = new()
             {
                 UserId = user.Id,
                 User = user,
@@ -80,7 +80,7 @@ namespace SchoolSystem.Core.Services
                 throw new ArgumentException(SubjectAlreadyExist);
             }
 
-            Subject subject = new Subject
+            Subject subject = new ()
             {
                 Name = model.Name
             };
@@ -164,7 +164,6 @@ namespace SchoolSystem.Core.Services
                 LastName = s.User.LastName,
                 Group = s.Group.Number,
                 Id = s.Id,
-                UserName = s.User.UserName
             })
             .ToListAsync();
 
