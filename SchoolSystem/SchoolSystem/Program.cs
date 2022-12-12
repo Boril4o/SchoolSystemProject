@@ -29,6 +29,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<ITeacherService, TeacherService>();
+builder.Services.AddScoped<IStudentService, StudentService>();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -65,6 +66,10 @@ app.UseEndpoints(e =>
 
     e.MapControllerRoute(
        name: "Teacher",
+        pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+    e.MapControllerRoute(
+       name: "Student",
         pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
     e.MapControllerRoute(

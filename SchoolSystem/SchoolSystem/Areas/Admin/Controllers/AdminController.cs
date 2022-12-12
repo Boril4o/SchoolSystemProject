@@ -243,7 +243,7 @@ namespace SchoolSystem.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> EditStudent(int id)
         {
-            Student s = await adminService.GetStudent(id);
+            SchoolSystem.Data.Data.Entities.Student s = await adminService.GetStudent(id);
             EditStudentViewModel model = new EditStudentViewModel
             {
                 FirstName = s.User.FirstName,

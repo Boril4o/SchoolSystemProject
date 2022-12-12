@@ -12,8 +12,12 @@ namespace SchoolSystem.Core.Models.Student
 
         public string LastName { get; set; }
 
-        public double AverageGrade { get; set; }
+        public IEnumerable<SchoolSystem.Data.Data.Entities.Grade> Grades { get; set; } = 
+            new List<SchoolSystem.Data.Data.Entities.Grade>();
 
-        public int Id { get; set; }
+        public IEnumerable<SchoolSystem.Data.Data.Entities.Note> Notes { get; set; } =
+            new List<SchoolSystem.Data.Data.Entities.Note>();
+
+        //public int Id { get; set; }
     }
 }

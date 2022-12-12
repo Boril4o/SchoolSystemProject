@@ -1,0 +1,30 @@
+﻿@using SchoolSystem.Core.Models.Student
+@model IEnumerable<StudentStatsViewModel>
+@{
+	ViewBag.Title = "Student Stats";
+	ViewBag.Grades = "";
+}
+<h2 class="text-center">@ViewBag.Title</h2> <hr />
+<table class="table table-striped">
+	<thead>
+		<tr> 
+			<th><label>FirstName</label></th>
+			<th><label>LastName</label></th>
+			<th><label>Grades</label></th>
+		</tr>
+		</thead> 
+		<tbody>
+			@foreach (var s in Model)
+			{ 
+				<tr>
+					<td><label>@s.FirstName</label></td>
+					<td><label>@s.LastName</label></td>
+					@foreach (var item in s.Grades)
+				{
+					
+				}
+				</tr>
+			} 
+		</tbody> 
+</table>
+
