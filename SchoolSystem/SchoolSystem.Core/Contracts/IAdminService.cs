@@ -43,5 +43,21 @@ namespace SchoolSystem.Core.Contracts
         public Task<Student> GetStudent(int id);
 
         public Task DeleteStudent(int id);
+
+        public Task<IEnumerable<GroupViewModel>> AllGroups();
+
+        public Task EditGroup(EditGroupViewModel model);
+
+        public Task<Group> GetGroup(int id);
+
+        public Task DeleteGroup(int id);
+
+        public Task<IEnumerable<SubjectViewModel>> AllSubjects();
+
+        public Task EditSubject(EditSubjectViewModel model);
+
+        public Task<Subject> GetSubject(int id);
+
+        public Task DeleteSubject(int id);
     }
 }

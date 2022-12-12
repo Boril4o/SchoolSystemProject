@@ -1,0 +1,30 @@
+﻿@using SchoolSystem.Core.Models.Group
+@model IEnumerable<GroupViewModel>
+@{
+	ViewBag.Title = "All Groups";
+}
+<h2 class="text-center">@ViewBag.Title</h2> <hr />
+<table class="table table-striped">
+	<thead>
+		<tr> 
+			<th><label>Number</label></th>
+			<th><label>People</label></th>
+			<th><label>Edit</label></th>
+		</tr>
+		</thead> 
+		<tbody>
+			@foreach (var g in Model)
+			{ 
+				<tr>
+					<td><label>@g.Number</label></td>
+					<td><label>@g.People/@g.MaxPeople</label></td> 
+					<td>		
+						<a  asp-area="Admin" asp-controller="Admin" asp-action="EditGroup" class="btn btn-primary btn-lg" asp-route-Id="@g.Id">Edit</a>
+						<a onclick="return confirm('Are you sure you want to delete group:@g.Number')" asp-area="Admin" asp-controller="Admin" asp-action="DeleteGroup" type="submit"*@ class="btn btn-primary" asp-route-Id="@g.Id">Delete</a>
+					</td>
+				</tr>
+			} 
+		</tbody> 
+</table>
+
+

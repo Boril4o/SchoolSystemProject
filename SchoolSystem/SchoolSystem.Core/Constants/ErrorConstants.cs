@@ -10,4 +10,5 @@ public class ErrorConstants
     public const string UserNameExist = "Username already exists";
     public const string UserDoesNotExist = "User does not exists";
     public const string Error = "Error";
+    public const string MaxPeopleLowerThanCurrentPeople = "Max People cannot be lower than current people in the group";
 }

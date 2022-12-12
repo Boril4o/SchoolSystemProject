@@ -145,6 +145,16 @@ namespace SchoolSystem.Core.Services
             await context.SaveChangesAsync();
         }
 
+        public async Task<IEnumerable<GroupViewModel>> AllGroups()
+            => await context.Groups.Select(g => new GroupViewModel
+            {
+                MaxPeople = g.MaxPeople,
+                Number = g.Number,
+                People = context.Students.Count(s => s.GroupId == g.Id),
+                Id = g.Id
+            })
+            .ToListAsync();
+
         public async Task<IEnumerable<StudentViewModel>> AllStudents()
          => await context
             .Students
@@ -155,6 +165,16 @@ namespace SchoolSystem.Core.Services
                 Group = s.Group.Number,
                 Id = s.Id,
                 UserName = s.User.UserName
+            })
+            .ToListAsync();
+
+        public async Task<IEnumerable<SubjectViewModel>> AllSubjects()
+            => await context
+            .Subjects
+            .Select(s => new SubjectViewModel
+            {
+                Id = s.Id,
+                Name = s.Name
             })
             .ToListAsync();
 
@@ -173,11 +193,27 @@ namespace SchoolSystem.Core.Services
             })
             .ToArrayAsync();
 
+        public async Task DeleteGroup(int id)
+        {
+            Group g = await GetGroup(id);
+
+            context.Groups.Remove(g);
+            await context.SaveChangesAsync();
+        }
+
         public async Task DeleteStudent(int id)
         {
             Student s = await GetStudent(id);
 
             context.Students.Remove(s);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task DeleteSubject(int id)
+        {
+            Subject s = await GetSubject(id);
+
+            context.Subjects.Remove(s);
             await context.SaveChangesAsync();
         }
 
@@ -214,6 +250,24 @@ namespace SchoolSystem.Core.Services
             await context.SaveChangesAsync();
         }
 
+        public async Task EditGroup(EditGroupViewModel model)
+        {
+            Group g = await context.Groups.FindAsync(model.Id);
+            if (g == null)
+            {
+                throw new ArgumentException(GroupDoesNotExist);
+            }
+
+            if (model.MaxPeople < await context.Students.CountAsync(s => s.GroupId == model.Id))
+            {
+                throw new ArgumentException(MaxPeopleLowerThanCurrentPeople);
+            }
+
+            g.Number = model.Number;
+            g.MaxPeople = model.MaxPeople;
+            await context.SaveChangesAsync();
+        }
+
         public async Task EditStudent(EditStudentViewModel model)
         {
             if (await IsUserNameExistAsync(model.UserName))
@@ -235,6 +289,22 @@ namespace SchoolSystem.Core.Services
             await context.SaveChangesAsync();
         }
 
+        public async Task EditSubject(EditSubjectViewModel model)
+        {
+            Subject s = await context
+                .Subjects
+                .Where(s => s.Name == model.Name)
+                .FirstAsync();
+
+            if (s == null)
+            {
+                throw new ArgumentException(SubjectDoesNotExist);
+            }
+
+            s.Name = model.Name;
+            await context.SaveChangesAsync();
+        }
+
         public async Task EditTeacherAsync(int id, EditTeacherViewModel model)
         {
             Teacher teacher = await GetTeacher(id);
@@ -249,11 +319,17 @@ namespace SchoolSystem.Core.Services
             await context.SaveChangesAsync();
         }
 
+        public async Task<Group> GetGroup(int id)
+            => await context.Groups.FindAsync(id);
+
         public async Task<IEnumerable<Group>> GetGroups()
             => await context.Groups.ToArrayAsync();
 
         public async Task<Student> GetStudent(int id)
           => await context.Students.Include(s => s.User).Where(s => s.Id == id).FirstOrDefaultAsync();
+
+        public async Task<Subject> GetSubject(int id)
+            => await context.Subjects.FindAsync(id);
 
         public async Task<IEnumerable<Subject>> GetSubjects()
          => await context.Subjects.ToListAsync<Subject>();

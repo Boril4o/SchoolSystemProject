@@ -14,6 +14,21 @@ namespace SchoolSystem.Areas.Admin.Controllers
     {
         private readonly IAdminService adminService;
 
+        private string ErrorMessage(Exception e)
+        {
+            string message;
+            if (e.GetType().Name == nameof(ArgumentException))
+            {
+                message = e.Message;
+            }
+            else
+            {
+                message = "Error";
+            }
+
+            return message;
+        }
+
         public AdminController(IAdminService adminService)
         {
             this.adminService = adminService;
@@ -47,14 +62,7 @@ namespace SchoolSystem.Areas.Admin.Controllers
             }
             catch (Exception e)
             {
-                if (e.GetType().Name == nameof(ArgumentException))
-                {
-                    ModelState.AddModelError("", e.Message);
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Error");
-                }
+                ModelState.AddModelError("", ErrorMessage(e));
                 return View(model);
             }
 
@@ -84,14 +92,7 @@ namespace SchoolSystem.Areas.Admin.Controllers
             }
             catch (Exception e)
             {
-                if (e.GetType().Name == nameof(ArgumentException))
-                {
-                    ModelState.AddModelError("", e.Message);
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Error");
-                }
+                ModelState.AddModelError("", ErrorMessage(e));
                 model.subjects = await adminService.GetSubjects();
                 return View(model);
             }
@@ -125,14 +126,7 @@ namespace SchoolSystem.Areas.Admin.Controllers
             }
             catch (Exception e)
             {
-                if (e.GetType().Name == nameof(ArgumentException))
-                {
-                    ModelState.AddModelError("", e.Message);
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Error");
-                }
+                ModelState.AddModelError("", ErrorMessage(e));
                 return View(model);
             }
 
@@ -166,14 +160,7 @@ namespace SchoolSystem.Areas.Admin.Controllers
             }
             catch (Exception e)
             {
-                if (e.GetType().Name == nameof(ArgumentException))
-                {
-                    ModelState.AddModelError("", e.Message);
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Error");
-                }
+                ModelState.AddModelError("", ErrorMessage(e));
                 return View(model);
             }
 
@@ -287,14 +274,7 @@ namespace SchoolSystem.Areas.Admin.Controllers
             }
             catch (Exception e)
             {
-                if (e.GetType().Name == nameof(ArgumentException))
-                {
-                    ModelState.AddModelError("", e.Message);
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Error");
-                }
+                ModelState.AddModelError("", ErrorMessage(e));
 
                 model.Groups = await adminService.GetGroups();
                 return View(model);
@@ -310,6 +290,118 @@ namespace SchoolSystem.Areas.Admin.Controllers
         {
             await adminService.DeleteStudent(id);
             return View(nameof(AllStudents), await adminService.AllStudents());
+        }
+
+        [Area(AreaName)]
+        [Authorize(Roles = AdminRoleName)]
+        [HttpGet]
+        public async Task<IActionResult> AllGroups()
+        {
+            return View(await adminService.AllGroups());
+        }
+
+        [Area(AreaName)]
+        [Authorize(Roles = AdminRoleName)]
+        [HttpGet]
+        public async Task<IActionResult> EditGroup(int id)
+        {
+            Group group = await adminService.GetGroup(id);
+            EditGroupViewModel model = new EditGroupViewModel
+            {
+                Number = group.Number,
+                MaxPeople = group.MaxPeople,
+                Id = group.Id
+            };
+
+            return View(model);
+        }
+
+        [Area(AreaName)]
+        [Authorize(Roles = AdminRoleName)]
+        [HttpPost]
+        public async Task<IActionResult> EditGroup(EditGroupViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            try
+            {
+                await adminService.EditGroup(model);
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError("", ErrorMessage(e));
+
+                return View(model);
+            }
+
+            return View(nameof(AllGroups), await adminService.AllGroups());
+        }
+
+        [Area(AreaName)]
+        [Authorize(Roles = AdminRoleName)]
+        [HttpGet]
+        public async Task<IActionResult> DeleteGroup(int id)
+        {
+            await adminService.DeleteGroup(id);
+
+            return View(nameof(AllGroups), await adminService.AllGroups());
+        }
+
+        [Area(AreaName)]
+        [Authorize(Roles = AdminRoleName)]
+        [HttpGet]
+        public async Task<IActionResult> AllSubjects()
+        {
+            return View(await adminService.AllSubjects());
+        }
+
+        [Area(AreaName)]
+        [Authorize(Roles = AdminRoleName)]
+        [HttpGet]
+        public async Task<IActionResult> EditSubject(int id)
+        {
+            Subject s = await adminService.GetSubject(id);
+            EditSubjectViewModel model = new EditSubjectViewModel
+            {
+                Name = s.Name
+            };
+
+            return View(model);
+        }
+
+        [Area(AreaName)]
+        [Authorize(Roles = AdminRoleName)]
+        [HttpPost]
+        public async Task<IActionResult> EditStubject(EditSubjectViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            try
+            {
+                await adminService.EditSubject(model);
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError("", ErrorMessage(e));
+            }
+
+            return View(nameof(AllSubjects), await adminService.AllSubjects());
+        }
+
+        [Area(AreaName)]
+        [Authorize(Roles = AdminRoleName)]
+        [HttpGet]
+        public async Task<IActionResult> DeleteSubject(int id)
+        {
+            await adminService.DeleteSubject(id);
+
+            return View(nameof(AllSubjects), await adminService.AllSubjects());
         }
     }
 }
