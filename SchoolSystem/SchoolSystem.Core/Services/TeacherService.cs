@@ -6,6 +6,7 @@ using SchoolSystem.Core.Models.Group;
 using SchoolSystem.Core.Models.Student;
 using SchoolSystem.Data.Data;
 using SchoolSystem.Data.Data.Entities;
+using SchoolSystem.Core.Models.Note;
 
 namespace SchoolSystem.Core.Services
 {
@@ -42,6 +43,34 @@ namespace SchoolSystem.Core.Services
             };
 
             await context.Grades.AddAsync(g);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task AddNote(AddNoteViewModel model)
+        {
+            User u = await context.Users.Where(u => u.UserName == model.TeacherUserName).FirstOrDefaultAsync();
+            if (u == null)
+            {
+                throw new ArgumentException(UsernameDoesNotExist);
+            }
+
+            Teacher t = await context.Teachers.Where(t => t.UserId == u.Id).FirstOrDefaultAsync();
+            if (t == null)
+            {
+                throw new ArgumentException(TeacherDoesNotExist);
+            }
+
+            Note n = new Note
+            {
+                Title = model.Title,
+                Description = model.Description,
+                TeacherId = t.Id,
+                StudentId = model.StudentId,
+                SubjectId = model.SubjectId,
+                TeacherName = u.FirstName + " " + u.LastName
+            };
+
+            await context.Notes.AddAsync(n);
             await context.SaveChangesAsync();
         }
 

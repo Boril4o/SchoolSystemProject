@@ -1,5 +1,6 @@
 ﻿using SchoolSystem.Core.Models.Grade;
 using SchoolSystem.Core.Models.Group;
+using SchoolSystem.Core.Models.Note;
 using SchoolSystem.Core.Models.Student;
 using SchoolSystem.Data.Data.Entities;
 using System;
@@ -19,5 +20,7 @@ namespace SchoolSystem.Core.Contracts
         public Task AddGrade(AddGradeViewModel model);
 
         public Task<IEnumerable<Subject>> GetSubjects();
+
+        public Task AddNote(AddNoteViewModel model);
     }
 }

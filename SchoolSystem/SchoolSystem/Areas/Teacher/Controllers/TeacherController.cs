@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SchoolSystem.Core.Contracts;
 using SchoolSystem.Core.Models.Grade;
+using SchoolSystem.Core.Models.Note;
 using SchoolSystem.Core.Services;
 
 namespace SchoolSystem.Areas.Teacher.Controllers
@@ -69,6 +70,40 @@ namespace SchoolSystem.Areas.Teacher.Controllers
             try
             {
                 await service.AddGrade(model);
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError("", ErrorMessage(e));
+                model.Subjects = await service.GetSubjects();
+                return View(model);
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        [Area(TeacherConstants.AreaName)]
+        [Authorize(Roles = TeacherConstants.TeacherRoleName)]
+        [HttpGet]
+        public async Task<IActionResult> AddNote(int id)
+        {
+            AddNoteViewModel model = new AddNoteViewModel();
+            model.Subjects = await service.GetSubjects();
+            model.StudentId = id;
+            TempData["NoteStudentId"] = model.StudentId;
+
+            return View(model);
+        }
+
+        [Area(TeacherConstants.AreaName)]
+        [Authorize(Roles = TeacherConstants.TeacherRoleName)]
+        [HttpPost]
+        public async Task<IActionResult> AddNote(AddNoteViewModel model)
+        {
+            model.StudentId = (int)TempData["NoteStudentId"];
+
+            try
+            {
+                await service.AddNote(model);
             }
             catch (Exception e)
             {
