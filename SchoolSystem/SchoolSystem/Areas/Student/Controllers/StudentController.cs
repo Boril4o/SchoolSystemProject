@@ -15,48 +15,5 @@ namespace SchoolSystem.Areas.Student.Controllers
             this.service = service;
         }
 
-        private string ErrorMessage(Exception e)
-        {
-            string message;
-            if (e.GetType().Name == nameof(ArgumentException))
-            {
-                message = e.Message;
-            }
-            else
-            {
-                message = "Error";
-            }
-
-            return message;
-        }
-
-        [Authorize(Roles = StudentRoleName)]
-        [Area(AreaName)]
-        [HttpGet]
-        public async Task<IActionResult> GetUserName()
-        {
-            StudenUserNameViewMode model = new StudenUserNameViewMode();
-            
-            return View(model);
-        }
-
-        [Authorize(Roles = StudentRoleName)]
-        [Area(AreaName)]
-        [HttpGet]
-        public async Task<IActionResult> ShowStats(StudenUserNameViewMode username)
-        {
-            StudentStatsViewModel model;
-            try
-            {
-               model =  await service.StudentStats(username.UserName);
-            }
-            catch (Exception e)
-            {
-                ModelState.AddModelError("", ErrorMessage(e));
-                return View(username);
-            }
-
-            return View(model);
-        }
     }
 }

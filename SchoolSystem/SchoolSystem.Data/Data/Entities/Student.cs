@@ -23,8 +23,22 @@ namespace SchoolSystem.Data.Data.Entities
         public int? GroupId { get; set; }
         public Group Group { get; set; }
 
-        public List<Note> Notes { get; set; }
+        [NotMapped]
+        public double AverageGrade
+        {
+            get
+            {
+                if (Grades.Count() == 0)
+                {
+                    return 0;
+                }
 
-        public List<Grade> Grades { get; set; }
+                return Grades.Average(g => g.Number);
+            }
+        }
+
+        public List<Note> Notes { get; set; } = new List<Note>();
+
+        public List<Grade> Grades { get; set; } = new List<Grade>();
     }
 }

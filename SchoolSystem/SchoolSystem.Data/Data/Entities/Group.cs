@@ -25,6 +25,6 @@ namespace SchoolSystem.Data.Data.Entities
         [Range(GroupMinPeople, GroupMaxPeople)]
         public int MaxPeople { get; set; }
 
-        public List<Student> Students { get; set; }
+        public List<Student> Students { get; set; } = new List<Student>();
     }
 }

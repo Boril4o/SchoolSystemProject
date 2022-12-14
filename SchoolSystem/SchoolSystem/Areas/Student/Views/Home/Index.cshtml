@@ -1,12 +1,24 @@
-﻿@{
+﻿@using SchoolSystem.Core.Models.Student
+@model StudentHomePageStatsViewModel
+@{
 	ViewData["Title"] = "Home Page";
+	Layout = "_StudentLayout";
 } 
-	<div class="mt-4 p-5 bg-light"> 
-		<h1 class="text-center display-4">Welcome Student</h1>
-		<hr class="my-4"> 
-		<p class="lead"></p>
-		<a asp-area="Student" asp-controller="Student" asp-action="GetUserName" class="btn btn-primary btn-lg">See Grades and Notes</a>
-</div> 
+<div class="position-absolute start-5 mt-5 p-5 w-25 bg-success"> 
+	<h1 class="text-center display-1">@Model.Grade</h1>
+</div>
+
+<div class="position-absolute start-50 mt-5 p-5 w-25 bg-warning">
+	<h1 class="text-center display-1">@Model.GradesCount</h1>
+</div>
+
+<div class="position-absolute start-5 top-50 mt-5 p-5 w-25 bg-info">
+	<h1 class="text-center display-1">@Model.PlaceInClass</h1>
+</div>
+
+<div class="position-absolute start-50 top-50 top-50 mt-5 p-0 w-25 bg-danger">
+	<h1 class="text-center display-1">@Model.BestSubjectName</h1>
+</div>
 		 
 			
 
