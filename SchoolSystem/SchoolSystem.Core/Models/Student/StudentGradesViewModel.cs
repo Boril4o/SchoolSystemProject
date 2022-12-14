@@ -8,12 +8,9 @@ namespace SchoolSystem.Core.Models.Student
 {
     public class StudentGradesViewModel
     {
-        public string FirstName { get; set; }
+        public string Grades { get; set; }
 
-        public string LastName { get; set; }
+        public string Subject { get; set; }
 
-        public double AverageGrade { get; set; }
-
-        public string SubjectName { get; set; }
     }
 }

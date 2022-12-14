@@ -25,22 +25,9 @@ namespace SchoolSystem.Areas.Student.Controllers
             {
                 model = await service.GetStudentHomePageStats(User);
             }
-            catch (Exception e)
+            catch
             {
-                if (e.Message == "Student does not exist")
-                {
-                    model = new StudentHomePageStatsViewModel
-                    {
-                        Grade = "0.00",
-                        BestSubjectName = "None",
-                        GradesCount = "0",
-                        PlaceInClass = "None"
-                    };
-                }
-                else
-                {
-                    return NotFound();
-                }
+                return NotFound();
             }
 
             return View(model);

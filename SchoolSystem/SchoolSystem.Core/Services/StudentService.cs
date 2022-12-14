@@ -6,6 +6,7 @@ using SchoolSystem.Data.Data;
 using SchoolSystem.Data.Data.Entities;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using static SchoolSystem.Core.Constraints.ErrorConstants;
 namespace SchoolSystem.Core.Services
 {
@@ -19,6 +20,58 @@ namespace SchoolSystem.Core.Services
         {
             this.context = context;
             this.userManager = userManager;
+        }
+
+        public async Task<IEnumerable<StudentGradesViewModel>> GetStudentGrades(ClaimsPrincipal currentUser)
+        {
+            List<StudentGradesViewModel> model = new List<StudentGradesViewModel>();
+
+            User user = await userManager.GetUserAsync(currentUser);
+
+            if (user == null)
+            {
+                throw new ArgumentException(UserDoesNotExist);
+            }
+
+            var student = await context
+               .Students
+               .Where(s => s.UserId == user.Id)
+               .Include(s => s.Grades)
+               .ThenInclude(g => g.Subject)
+               .FirstOrDefaultAsync();
+
+            if (student == null)
+            {
+                throw new ArgumentException(StudentDoesNotExist);
+            }
+
+            foreach (var s in context.Subjects)
+            {
+                StringBuilder sb = new StringBuilder();
+                int count = 1;
+                foreach (var g in student.Grades)
+                {
+                    if (g.Subject.Name == s.Name)
+                    {
+                        sb.Append($"{g.Number}, ");
+                        count++;
+                    }
+
+                    if (count == 3)
+                    {
+                        sb.AppendLine();
+                        count = 0;
+                    }
+                }
+
+                model.Add(new StudentGradesViewModel
+                {
+                    Subject = s.Name,
+                    Grades = sb.ToString().Trim()
+                });
+            }
+
+            return model;
         }
 
         public async Task<StudentHomePageStatsViewModel> GetStudentHomePageStats(ClaimsPrincipal currentUser)
