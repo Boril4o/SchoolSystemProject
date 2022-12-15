@@ -6,6 +6,7 @@ using SchoolSystem.Data.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,6 +22,6 @@ namespace SchoolSystem.Core.Contracts
 
         public Task<IEnumerable<Subject>> GetSubjects();
 
-        public Task AddNote(AddNoteViewModel model);
+        public Task AddNote(AddNoteViewModel model, ClaimsPrincipal currentUser);
     }
 }

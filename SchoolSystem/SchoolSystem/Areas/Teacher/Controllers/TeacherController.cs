@@ -7,6 +7,8 @@ using SchoolSystem.Core.Services;
 
 namespace SchoolSystem.Areas.Teacher.Controllers
 {
+    [Area(TeacherConstants.AreaName)]
+    [Authorize(Roles = TeacherConstants.TeacherRoleName)]
     public class TeacherController : Controller
     {
         private readonly ITeacherService service;
@@ -31,25 +33,18 @@ namespace SchoolSystem.Areas.Teacher.Controllers
             return message;
         }
 
-        [Area(TeacherConstants.AreaName)]
-        [Authorize(Roles = TeacherConstants.TeacherRoleName)]
         [HttpGet]
         public async Task<IActionResult> AllGroups()
         {
             return View(await service.AllGroups());
         }
 
-        [Area(TeacherConstants.AreaName)]
-        [Authorize(Roles = TeacherConstants.TeacherRoleName)]
         [HttpGet]
         public async Task<IActionResult> AllStudentsFromGroup(int id)
         {
             return View(await service.AllStudentsFromGroup(id));
         }
 
-        
-        [Area(TeacherConstants.AreaName)]
-        [Authorize(Roles = TeacherConstants.TeacherRoleName)]
         [HttpGet]
         public async Task<IActionResult> AddGrade(int id)
         {
@@ -61,8 +56,6 @@ namespace SchoolSystem.Areas.Teacher.Controllers
             return View(model);
         }
 
-        [Area(TeacherConstants.AreaName)]
-        [Authorize(Roles = TeacherConstants.TeacherRoleName)]
         [HttpPost]
         public async Task<IActionResult> AddGrade(AddGradeViewModel model)
         {
@@ -81,8 +74,6 @@ namespace SchoolSystem.Areas.Teacher.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        [Area(TeacherConstants.AreaName)]
-        [Authorize(Roles = TeacherConstants.TeacherRoleName)]
         [HttpGet]
         public async Task<IActionResult> AddNote(int id)
         {
@@ -94,8 +85,6 @@ namespace SchoolSystem.Areas.Teacher.Controllers
             return View(model);
         }
 
-        [Area(TeacherConstants.AreaName)]
-        [Authorize(Roles = TeacherConstants.TeacherRoleName)]
         [HttpPost]
         public async Task<IActionResult> AddNote(AddNoteViewModel model)
         {
@@ -103,12 +92,13 @@ namespace SchoolSystem.Areas.Teacher.Controllers
 
             try
             {
-                await service.AddNote(model);
+                await service.AddNote(model, User);
             }
             catch (Exception e)
             {
                 ModelState.AddModelError("", ErrorMessage(e));
                 model.Subjects = await service.GetSubjects();
+                TempData["NoteStudentId"] = model.StudentId;
                 return View(model);
             }
 

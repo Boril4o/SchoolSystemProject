@@ -7,16 +7,20 @@ using SchoolSystem.Core.Models.Student;
 using SchoolSystem.Data.Data;
 using SchoolSystem.Data.Data.Entities;
 using SchoolSystem.Core.Models.Note;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
 
 namespace SchoolSystem.Core.Services
 {
     public class TeacherService : ITeacherService
     {
         private readonly ApplicationDbContext context;
+        private readonly UserManager<User> userManager;
 
-        public TeacherService(ApplicationDbContext context)
+        public TeacherService(ApplicationDbContext context, UserManager<User> userManager)
         {
             this.context = context;
+            this.userManager = userManager;
         }
 
         public async Task AddGrade(AddGradeViewModel model)
@@ -46,31 +50,25 @@ namespace SchoolSystem.Core.Services
             await context.SaveChangesAsync();
         }
 
-        public async Task AddNote(AddNoteViewModel model)
+        public async Task AddNote(AddNoteViewModel model, ClaimsPrincipal currentUser)
         {
-            User u = await context.Users.Where(u => u.UserName == model.TeacherUserName).FirstOrDefaultAsync();
-            if (u == null)
-            {
-                throw new ArgumentException(UsernameDoesNotExist);
-            }
+            User user = await userManager.GetUserAsync(currentUser);
 
-            Teacher t = await context.Teachers.Where(t => t.UserId == u.Id).FirstOrDefaultAsync();
-            if (t == null)
-            {
-                throw new ArgumentException(TeacherDoesNotExist);
-            }
+            Teacher teacher = await context.Teachers.FirstOrDefaultAsync(t => t.UserId == user.Id);
 
-            Note n = new Note
+            Note note = new Note
             {
                 Title = model.Title,
                 Description = model.Description,
-                TeacherId = t.Id,
+                TeacherId = teacher.Id,
                 StudentId = model.StudentId,
                 SubjectId = model.SubjectId,
-                TeacherName = u.FirstName + " " + u.LastName
+                TeacherName = user.FirstName + " " + user.LastName,
+                Date = DateTime.UtcNow,
+                IsPostive = model.IsPositive
             };
 
-            await context.Notes.AddAsync(n);
+            await context.Notes.AddAsync(note);
             await context.SaveChangesAsync();
         }
 

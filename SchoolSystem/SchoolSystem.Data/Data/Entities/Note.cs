@@ -30,5 +30,11 @@ namespace SchoolSystem.Data.Data.Entities
         [ForeignKey(nameof(Subject))]
         public int SubjectId { get; set; }
         public Subject Subject { get; set; }
+
+        [Required]
+        public bool IsPostive { get; set; }
+
+        [Required]
+        public DateTime Date { get; init; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SchoolSystem.Core.Contracts;
+using SchoolSystem.Core.Models.Note;
 using SchoolSystem.Core.Models.Student;
 using SchoolSystem.Data.Data;
 using SchoolSystem.Data.Data.Entities;
@@ -28,22 +29,12 @@ namespace SchoolSystem.Core.Services
 
             User user = await userManager.GetUserAsync(currentUser);
 
-            if (user == null)
-            {
-                throw new ArgumentException(UserDoesNotExist);
-            }
-
             var student = await context
                .Students
                .Where(s => s.UserId == user.Id)
                .Include(s => s.Grades)
                .ThenInclude(g => g.Subject)
                .FirstOrDefaultAsync();
-
-            if (student == null)
-            {
-                throw new ArgumentException(StudentDoesNotExist);
-            }
 
             foreach (var s in context.Subjects)
             {
@@ -67,7 +58,7 @@ namespace SchoolSystem.Core.Services
                 model.Add(new StudentGradesViewModel
                 {
                     Subject = s.Name,
-                    Grades = sb.ToString().Trim()
+                    Grades = sb.ToString().TrimEnd().TrimEnd(',')
                 });
             }
 
@@ -78,11 +69,6 @@ namespace SchoolSystem.Core.Services
         {
             User user = await userManager.GetUserAsync(currentUser);
 
-            if (user == null)
-            {
-                throw new ArgumentException(UserDoesNotExist);
-            }
-
             var student = await context
                 .Students
                 .Include(s => s.Grades)
@@ -92,11 +78,6 @@ namespace SchoolSystem.Core.Services
                 .ThenInclude(s => s.Grades)
                 .Where(s => s.UserId == user.Id)
                 .FirstOrDefaultAsync();
-
-            if (student == null)
-            {
-                throw new ArgumentException(StudentDoesNotExist);
-            }
 
             double grade;
             grade = student.AverageGrade;
@@ -151,6 +132,33 @@ namespace SchoolSystem.Core.Services
             return model;
         }
 
-       
+        public async Task<IEnumerable<NoteViewModel>> GetStudentNotes(ClaimsPrincipal currentUser)
+        {
+            User user = await userManager.GetUserAsync(currentUser);
+
+            Student student = await context
+                 .Students
+                 .Where(s => s.UserId == user.Id)
+                 .Include(s => s.Notes)
+                 .ThenInclude(n => n.Subject)
+                 .FirstOrDefaultAsync();
+
+            var model = new List<NoteViewModel>();
+
+            foreach (var note in student.Notes)
+            {
+                model.Add(new NoteViewModel
+                {
+                    Title = note.Title,
+                    Description = note.Description,
+                    SubjectName = note.Subject.Name,
+                    TeacherName = note.TeacherName,
+                    IsPositive = note.IsPostive,
+                    Date = note.Date
+                });
+            }
+
+            return model.OrderByDescending(x => x.Date);
+        }
     }
 }

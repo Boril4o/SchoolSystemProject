@@ -36,7 +36,7 @@ namespace SchoolSystem.Data.Data.Constants
         public const int UserPasswordMinLength = 5;
 
         //Note
-        public const int NoteTitleMaxLength = 20;
+        public const int NoteTitleMaxLength = 40;
         public const int NoteTitleMinLength = 3;
 
         public const int NoteDescriptionMaxLength = 300;

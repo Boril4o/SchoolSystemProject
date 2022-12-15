@@ -1,0 +1,31 @@
+﻿@using SchoolSystem.Core.Models.Note
+@model IEnumerable<NoteViewModel>
+
+@{
+	Layout = "_StudentLayout";
+}
+
+@if (@Model.Count() > 0)
+{
+	foreach (var note in @Model)
+	{
+		string bgColor = "danger";
+		if (note.IsPositive)
+		{
+			bgColor = "success";
+		}
+
+		<div class="bg-@bgColor mt-4 p-5">
+			<h6>By @note.TeacherName</h6>
+			<h6>Subject: @note.SubjectName</h6>
+			<h1 class="text-center">@note.Title</h1>
+			<h4 class="text-center">@note.Description</h4>
+		</div>
+	}
+}
+else
+{
+	<div class="bg-light text-center mt-4 p-5">
+		<h1>You don't have any notes</h1>
+	</div>
+}

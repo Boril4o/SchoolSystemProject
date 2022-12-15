@@ -21,7 +21,7 @@ namespace SchoolSystem.Core.Models.Note
 
         public int SubjectId { get; set; }
 
-        public string TeacherUserName { get; set; }
+        public bool IsPositive { get; set; }
 
         public IEnumerable<SchoolSystem.Data.Data.Entities.Subject> Subjects { get; set; } =
           new List<SchoolSystem.Data.Data.Entities.Subject>();
