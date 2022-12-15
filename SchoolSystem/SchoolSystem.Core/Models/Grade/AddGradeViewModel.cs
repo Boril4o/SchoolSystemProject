@@ -16,7 +16,5 @@ namespace SchoolSystem.Core.Models.Grade
 
         public IEnumerable<SchoolSystem.Data.Data.Entities.Subject> Subjects { get; set; } =
             new List<SchoolSystem.Data.Data.Entities.Subject>();
-
-        public string TeacherUserName { get; set; }
     }
 }

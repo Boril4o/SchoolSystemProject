@@ -10,6 +10,8 @@ using static SchoolSystem.Areas.Admin.AdminConstans;
 
 namespace SchoolSystem.Areas.Admin.Controllers
 {
+    [Area(AreaName)]
+    [Authorize(Roles = AdminRoleName)]
     public class AdminController : Controller
     {
         private readonly IAdminService adminService;
@@ -33,26 +35,21 @@ namespace SchoolSystem.Areas.Admin.Controllers
         {
             this.adminService = adminService;
         }
-
-        [Area(AreaName)]
-        [Authorize(Roles = AdminRoleName)]
+        
         public IActionResult Index()
         {
             return View();
         }
 
-        [Area(AreaName)]
-        [Authorize(Roles = AdminRoleName)]
         [HttpGet]
-        public IActionResult AddStudent()
+        public async Task<IActionResult> AddStudent()
         {
             AddStudentViewModel model = new AddStudentViewModel();
+            model.Groups = await adminService.GetGroups();
 
             return View(model);
         }
 
-        [Area(AreaName)]
-        [Authorize(Roles = AdminRoleName)]
         [HttpPost]
         public async Task<IActionResult> AddStudent(AddStudentViewModel model)
         {
@@ -63,6 +60,7 @@ namespace SchoolSystem.Areas.Admin.Controllers
             catch (Exception e)
             {
                 ModelState.AddModelError("", ErrorMessage(e));
+                model.Groups = await adminService.GetGroups();
                 return View(model);
             }
 
@@ -70,19 +68,16 @@ namespace SchoolSystem.Areas.Admin.Controllers
             return View(nameof(Index));
         }
 
-        [Area(AreaName)]
-        [Authorize(Roles = AdminRoleName)]
         [HttpGet]
         public async Task<IActionResult> AddTeacher()
         {
             AddTeacherViewModel model = new AddTeacherViewModel();
             model.subjects = await adminService.GetSubjects();
+            model.Groups = await adminService.GetGroups();
 
             return View(model);
         }
 
-        [Area(AreaName)]
-        [Authorize(Roles = AdminRoleName)]
         [HttpPost]
         public async Task<IActionResult> AddTeacher(AddTeacherViewModel model)
         {
@@ -94,14 +89,13 @@ namespace SchoolSystem.Areas.Admin.Controllers
             {
                 ModelState.AddModelError("", ErrorMessage(e));
                 model.subjects = await adminService.GetSubjects();
+                model.Groups = await adminService.GetGroups();
                 return View(model);
             }
 
             return View(nameof(Index));
         }
 
-        [Area(AreaName)]
-        [Authorize(Roles = AdminRoleName)]
         [HttpGet]
         public IActionResult AddGroup()
         {
@@ -110,8 +104,6 @@ namespace SchoolSystem.Areas.Admin.Controllers
             return View(model);
         }
 
-        [Area(AreaName)]
-        [Authorize(Roles = AdminRoleName)]
         [HttpPost]
         public async Task<IActionResult> AddGroup(AddGroupViewModel model)
         {
@@ -133,8 +125,6 @@ namespace SchoolSystem.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
         
-        [Area(AreaName)]
-        [Authorize(Roles = AdminRoleName)]
         [HttpGet]
         public IActionResult AddSubject()
         {
@@ -143,8 +133,6 @@ namespace SchoolSystem.Areas.Admin.Controllers
             return View(model);
         }
 
-        [Area(AreaName)]
-        [Authorize(Roles = AdminRoleName)]
         [HttpPost]
         public async Task<IActionResult> AddSubject(AddSubjectViewModel model)
         {
@@ -167,8 +155,6 @@ namespace SchoolSystem.Areas.Admin.Controllers
             return View(nameof(Index));
         }
 
-        [Area(AreaName)]
-        [Authorize(Roles = AdminRoleName)]
         [HttpGet]
         public async Task<IActionResult> AllTeachers()
         {
@@ -177,8 +163,6 @@ namespace SchoolSystem.Areas.Admin.Controllers
             return View(teachers);
         }
 
-        [Area(AreaName)]
-        [Authorize(Roles = AdminRoleName)]
         [HttpGet]
         public async Task<IActionResult> EditTeacher(int id)
         {
@@ -202,8 +186,6 @@ namespace SchoolSystem.Areas.Admin.Controllers
             return View(model);
         }
 
-        [Area(AreaName)]
-        [Authorize(Roles = AdminRoleName)]
         [HttpPost]
         public async Task<IActionResult> EditTeacher(EditTeacherViewModel model)
         {
@@ -220,8 +202,6 @@ namespace SchoolSystem.Areas.Admin.Controllers
             return View(nameof(AllTeachers), await adminService.AllTeachers());
         }
         
-        [Area(AreaName)]
-        [Authorize(Roles = AdminRoleName)]
         [HttpGet]
         public async Task<IActionResult> DeleteTeacher(int id)
         {
@@ -230,16 +210,12 @@ namespace SchoolSystem.Areas.Admin.Controllers
             return View(nameof(Index));
         }
 
-        [Area(AreaName)]
-        [Authorize(Roles = AdminRoleName)]
         [HttpGet]
         public async Task<IActionResult> AllStudents()
         {
             return View(await adminService.AllStudents());
         }
 
-        [Area(AreaName)]
-        [Authorize(Roles = AdminRoleName)]
         [HttpGet]
         public async Task<IActionResult> EditStudent(int id)
         {
@@ -257,8 +233,6 @@ namespace SchoolSystem.Areas.Admin.Controllers
             return View(model);
         }
 
-        [Area(AreaName)]
-        [Authorize(Roles = AdminRoleName)]
         [HttpPost]
         public async Task<IActionResult> EditStudent(EditStudentViewModel model)
         {
@@ -283,8 +257,6 @@ namespace SchoolSystem.Areas.Admin.Controllers
             return View(nameof(AllStudents), await adminService.AllStudents());
         }
 
-        [Area(AreaName)]
-        [Authorize(Roles = AdminRoleName)]
         [HttpGet]
         public async Task<IActionResult> DeleteStudent(int id)
         {
@@ -292,16 +264,12 @@ namespace SchoolSystem.Areas.Admin.Controllers
             return View(nameof(AllStudents), await adminService.AllStudents());
         }
 
-        [Area(AreaName)]
-        [Authorize(Roles = AdminRoleName)]
         [HttpGet]
         public async Task<IActionResult> AllGroups()
         {
             return View(await adminService.AllGroups());
         }
 
-        [Area(AreaName)]
-        [Authorize(Roles = AdminRoleName)]
         [HttpGet]
         public async Task<IActionResult> EditGroup(int id)
         {
@@ -316,8 +284,6 @@ namespace SchoolSystem.Areas.Admin.Controllers
             return View(model);
         }
 
-        [Area(AreaName)]
-        [Authorize(Roles = AdminRoleName)]
         [HttpPost]
         public async Task<IActionResult> EditGroup(EditGroupViewModel model)
         {
@@ -340,8 +306,6 @@ namespace SchoolSystem.Areas.Admin.Controllers
             return View(nameof(AllGroups), await adminService.AllGroups());
         }
 
-        [Area(AreaName)]
-        [Authorize(Roles = AdminRoleName)]
         [HttpGet]
         public async Task<IActionResult> DeleteGroup(int id)
         {
@@ -350,16 +314,12 @@ namespace SchoolSystem.Areas.Admin.Controllers
             return View(nameof(AllGroups), await adminService.AllGroups());
         }
 
-        [Area(AreaName)]
-        [Authorize(Roles = AdminRoleName)]
         [HttpGet]
         public async Task<IActionResult> AllSubjects()
         {
             return View(await adminService.AllSubjects());
         }
 
-        [Area(AreaName)]
-        [Authorize(Roles = AdminRoleName)]
         [HttpGet]
         public async Task<IActionResult> EditSubject(int id)
         {
@@ -373,8 +333,6 @@ namespace SchoolSystem.Areas.Admin.Controllers
             return View(model);
         }
 
-        [Area(AreaName)]
-        [Authorize(Roles = AdminRoleName)]
         [HttpPost]
         public async Task<IActionResult> EditSubject(EditSubjectViewModel model)
         {
@@ -395,8 +353,6 @@ namespace SchoolSystem.Areas.Admin.Controllers
             return View(nameof(AllSubjects), await adminService.AllSubjects());
         }
 
-        [Area(AreaName)]
-        [Authorize(Roles = AdminRoleName)]
         [HttpGet]
         public async Task<IActionResult> DeleteSubject(int id)
         {

@@ -23,30 +23,22 @@ namespace SchoolSystem.Core.Services
             this.userManager = userManager;
         }
 
-        public async Task AddGrade(AddGradeViewModel model)
+        public async Task AddGrade(AddGradeViewModel model, ClaimsPrincipal currentUser)
         {
-            User u = await context.Users.Where(u => u.UserName == model.TeacherUserName).FirstOrDefaultAsync();
-            if (u == null)
-            {
-                throw new ArgumentException(UsernameDoesNotExist);
-            }
+            User user = await userManager.GetUserAsync(currentUser);
 
-            Teacher t = await context.Teachers.Where(t => t.UserId == u.Id).FirstOrDefaultAsync();
-            if (t == null)
-            {
-                throw new ArgumentException(TeacherDoesNotExist);
-            }
-
-            Grade g = new Grade()
+            Teacher teacher = await context.Teachers.FirstOrDefaultAsync(t => t.UserId == user.Id);
+            
+            Grade grade = new Grade()
             {
                 Number = model.Number,
                 StudentId = model.StudentId,
                 SubjectId = model.SubjectId,
-                TeacherId = t.Id,
-                TeacherName = u.FirstName + " " + u.LastName
+                TeacherId = teacher.Id,
+                TeacherName = user.FirstName + " " + user.LastName
             };
 
-            await context.Grades.AddAsync(g);
+            await context.Grades.AddAsync(grade);
             await context.SaveChangesAsync();
         }
 

@@ -18,7 +18,7 @@ namespace SchoolSystem.Core.Contracts
 
         public Task<IEnumerable<StudentViewModel>> AllStudentsFromGroup(int groupId);
 
-        public Task AddGrade(AddGradeViewModel model);
+        public Task AddGrade(AddGradeViewModel model, ClaimsPrincipal currentUser);
 
         public Task<IEnumerable<Subject>> GetSubjects();
 

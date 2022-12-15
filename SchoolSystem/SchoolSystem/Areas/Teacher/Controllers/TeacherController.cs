@@ -62,7 +62,7 @@ namespace SchoolSystem.Areas.Teacher.Controllers
             model.StudentId = (int)TempData["StudentId"];
             try
             {
-                await service.AddGrade(model);
+                await service.AddGrade(model, User);
             }
             catch (Exception e)
             {

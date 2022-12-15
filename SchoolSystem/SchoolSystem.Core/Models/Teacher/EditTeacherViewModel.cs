@@ -21,7 +21,7 @@ namespace SchoolSystem.Core.Models.Teacher
         [MinLength(UserLastNameMinLength)]
         public string LastName { get; set; }
 
-        public int? GroupId { get; set; }
+        public int GroupId { get; set; }
 
         public IEnumerable<SchoolSystem.Data.Data.Entities.Group> Groups =
             new List<SchoolSystem.Data.Data.Entities.Group>();

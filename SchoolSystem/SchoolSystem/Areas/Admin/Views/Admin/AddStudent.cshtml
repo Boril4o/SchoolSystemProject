@@ -17,9 +17,14 @@
                     <span asp-validation-for="@Model.UserName" class="text-danger"></span>
                 </div>
                 <div class="text-center mb-3">
-                    <label asp-for="@Model.GroupNumber" class="form-label">Group Number</label>
-                    <input asp-for="@Model.GroupNumber" class="form-control" autocomplete="Group-Number" aria-required="true" />
-                    <span asp-validation-for="@Model.GroupNumber" class="text-danger"></span>
+                    <label asp-for="@Model.GroupId" class="form-label">Group</label>
+                    <select asp-for="@Model.GroupId" class="form-control">
+                        @foreach (var s in Model.Groups)
+                    {
+                        <option value="@s.Id">@s.Number</option>
+                    }
+                     </select>
+                    <span asp-validation-for="GroupId" class="text-danger"></span>
                 </div>
                 <div class="text-center">
                     <button id="login-submit" type="submit" class="btn btn-primary">Add</button>

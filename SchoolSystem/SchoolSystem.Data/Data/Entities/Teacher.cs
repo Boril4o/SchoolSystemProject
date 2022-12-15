@@ -16,7 +16,7 @@ namespace SchoolSystem.Data.Data.Entities
         public User User { get; set; }
 
         [ForeignKey(nameof(Group))]
-        public int? GroupID { get; set; }
+        public int GroupID { get; set; }
         public Group Group { get; set; }
 
         [Range(typeof(decimal), TeacherMinSalary, TeacherMaxSalary)]

@@ -10,6 +10,8 @@ namespace SchoolSystem.Core.Models.Student
     {
         public string UserName { get; set; }
 
-        public string GroupNumber { get; set; }
+        public int GroupId { get; set; }
+
+        public IEnumerable<SchoolSystem.Data.Data.Entities.Group> Groups { get; set; }
     }
 }

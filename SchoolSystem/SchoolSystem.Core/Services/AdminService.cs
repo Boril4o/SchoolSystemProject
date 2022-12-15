@@ -47,13 +47,13 @@ namespace SchoolSystem.Core.Services
                 throw new ArgumentException(UsernameDoesNotExist);
             }
 
-            if (!await IsGroupExistAsync(model.GroupNumber))
+            Group group = await context.Groups
+                 .FirstOrDefaultAsync(g => g.Id == model.GroupId);
+
+            if (group == null)
             {
                 throw new ArgumentException(GroupDoesNotExist);
             }
-
-            Group group = await context.Groups
-                 .FirstOrDefaultAsync(g => g.Number == model.GroupNumber);
 
             User user = await context
                 .Users
@@ -101,8 +101,10 @@ namespace SchoolSystem.Core.Services
                 throw new ArgumentException(SubjectDoesNotExist);
             }
 
-            if (model.GroupNumber != null &&
-                !await IsGroupExistAsync(model.GroupNumber))
+            Group group = await context.Groups
+                .FirstOrDefaultAsync(g => g.Id == model.GroupId);
+
+            if (group == null)
             {
                 throw new ArgumentException(GroupDoesNotExist);
             }
@@ -110,9 +112,6 @@ namespace SchoolSystem.Core.Services
             User user = await context
                 .Users
                 .FirstOrDefaultAsync(u => u.UserName == model.UserName);
-
-            Group group = await context.Groups
-                 .FirstOrDefaultAsync(g => g.Number == model.GroupNumber);
 
             var result = await userManager.AddToRoleAsync(user, "Teacher");
 
@@ -160,6 +159,7 @@ namespace SchoolSystem.Core.Services
             .Students
             .Select(s => new StudentViewModel
             {
+                UserName = s.User.UserName,
                 FirstName = s.User.FirstName,
                 LastName = s.User.LastName,
                 Group = s.Group.Number,
