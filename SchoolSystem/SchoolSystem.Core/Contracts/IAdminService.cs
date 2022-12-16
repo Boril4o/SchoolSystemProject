@@ -2,7 +2,7 @@
 using SchoolSystem.Core.Models.Student;
 using SchoolSystem.Core.Models.Subject;
 using SchoolSystem.Core.Models.Teacher;
-using SchoolSystem.Data.Data.Entities;
+using SchoolSystem.Infrastructure.Data.Entities;
 
 namespace SchoolSystem.Core.Contracts
 {
@@ -13,6 +13,10 @@ namespace SchoolSystem.Core.Contracts
         public Task<bool> IsGroupExistAsync(string number);
 
         public Task<bool> IsUserNameExistAsync(string username);
+
+        public Task<bool> IsTeacherUserNameExistAsync(string username, int teacherId);
+
+        public Task<bool> IsStudentUserNameExistAsync(string username, int studentID);
 
         public Task AddTeacherAsync(AddTeacherViewModel model);
 
@@ -50,6 +54,8 @@ namespace SchoolSystem.Core.Contracts
 
         public Task<Group> GetGroup(int id);
 
+        public Task<Group> GetGroup(string number);
+
         public Task DeleteGroup(int id);
 
         public Task<IEnumerable<SubjectViewModel>> AllSubjects();
@@ -57,7 +63,10 @@ namespace SchoolSystem.Core.Contracts
         public Task EditSubject(EditSubjectViewModel model);
 
         public Task<Subject> GetSubject(int id);
+        public Task<Subject> GetSubject(string name);
 
         public Task DeleteSubject(int id);
+
+        public Task<int> GetStudentsCountFromGroup(int GroupId);
     }
 }

@@ -1,14 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SchoolSystem.Data.Data.Entities
+namespace SchoolSystem.Infrastructure.Data.Entities
 {
     public class Student
     {
         public Student()
         {
-            this.Notes = new List<Note>();
-            this.Grades = new List<Grade>();
+            Notes = new List<Note>();
+            Grades = new List<Grade>();
         }
 
         [Key]

@@ -1,14 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using static SchoolSystem.Data.Data.Constants.DataConstants;
+using static SchoolSystem.Infrastructure.Data.Constants.DataConstants;
 
-namespace SchoolSystem.Data.Data.Entities
+namespace SchoolSystem.Infrastructure.Data.Entities
 {
     public class Group
     {
         public Group()
         {
-            this.Students = new List<Student>();
+            Students = new List<Student>();
         }
 
         [Key]

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SchoolSystem.Core.Models.User;
 using SchoolSystem.Data.Data;
-using SchoolSystem.Data.Data.Entities;
+using SchoolSystem.Infrastructure.Data.Entities;
 
 namespace SchoolSystem.Controllers
 {

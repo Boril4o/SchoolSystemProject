@@ -1,4 +1,4 @@
-﻿using static SchoolSystem.Data.Data.Constants.DataConstants;
+﻿using static SchoolSystem.Infrastructure.Data.Constants.DataConstants;
 using System.ComponentModel.DataAnnotations;
 
 
@@ -9,6 +9,6 @@ namespace SchoolSystem.Core.Models.Subject
         [Required]
         [MaxLength(SubjectNameMaxLength)]
         [MinLength(SubjectNameMinLength)]
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
     }
 }

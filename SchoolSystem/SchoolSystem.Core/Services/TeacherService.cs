@@ -1,14 +1,13 @@
-﻿using static SchoolSystem.Core.Constraints.ErrorConstants;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SchoolSystem.Core.Contracts;
 using SchoolSystem.Core.Models.Grade;
 using SchoolSystem.Core.Models.Group;
 using SchoolSystem.Core.Models.Student;
-using SchoolSystem.Data.Data;
-using SchoolSystem.Data.Data.Entities;
 using SchoolSystem.Core.Models.Note;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
+using SchoolSystem.Infrastructure.Data.Entities;
+using SchoolSystem.Infrastructure.Data;
 
 namespace SchoolSystem.Core.Services
 {

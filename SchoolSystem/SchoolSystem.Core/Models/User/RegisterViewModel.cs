@@ -1,4 +1,4 @@
-﻿using static SchoolSystem.Data.Data.Constants.DataConstants;
+﻿using static SchoolSystem.Infrastructure.Data.Constants.DataConstants;
 using System.ComponentModel.DataAnnotations;
 
 

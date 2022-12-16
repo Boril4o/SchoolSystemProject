@@ -2,7 +2,7 @@
 {
     public class TeacherConstants
     {
-        public const string AreaName = "Teacher";
+        public const string TeacherAreaName = "Teacher";
         public const string TeacherRoleName = "Teacher";
     }
 }

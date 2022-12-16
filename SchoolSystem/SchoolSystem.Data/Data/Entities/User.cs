@@ -1,16 +1,16 @@
 ﻿
-using static SchoolSystem.Data.Data.Constants.DataConstants;
+using static SchoolSystem.Infrastructure.Data.Constants.DataConstants;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 
-namespace SchoolSystem.Data.Data.Entities
+namespace SchoolSystem.Infrastructure.Data.Entities
 {
     public class User : IdentityUser
     {
         [Required]
         [MaxLength(UserFirstNameMaxLength)]
         public override string UserName { get; set; }
-        
+
         [Required]
         [MaxLength(UserFirstNameMaxLength)]
         public string FirstName { get; set; }

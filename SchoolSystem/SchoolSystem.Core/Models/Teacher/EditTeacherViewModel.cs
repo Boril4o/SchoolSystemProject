@@ -1,4 +1,4 @@
-﻿using static SchoolSystem.Data.Data.Constants.DataConstants;
+﻿using static SchoolSystem.Infrastructure.Data.Constants.DataConstants;
 using System.ComponentModel.DataAnnotations;
 
 
@@ -23,13 +23,13 @@ namespace SchoolSystem.Core.Models.Teacher
 
         public int GroupId { get; set; }
 
-        public IEnumerable<SchoolSystem.Data.Data.Entities.Group> Groups =
-            new List<SchoolSystem.Data.Data.Entities.Group>();
+        public IEnumerable<Infrastructure.Data.Entities.Group>? Groups =
+            new List<Infrastructure.Data.Entities.Group>();
 
         public int SubjectId { get; set; }
 
-        public IEnumerable<SchoolSystem.Data.Data.Entities.Subject> Subjects =
-            new List<SchoolSystem.Data.Data.Entities.Subject>();
+        public IEnumerable<Infrastructure.Data.Entities.Subject>? Subjects =
+            new List<Infrastructure.Data.Entities.Subject>();
 
         [Range(typeof(decimal), TeacherMinSalary, TeacherMaxSalary)]
         public decimal Salary { get; set; }

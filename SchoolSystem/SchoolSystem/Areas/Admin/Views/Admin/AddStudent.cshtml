@@ -14,7 +14,7 @@
                 <div class="text-center mb-3">
                     <label asp-for="@Model.UserName" class="form-label">Username</label>
                     <input asp-for="@Model.UserName" class="form-control" autocomplete="UserName" aria-required="true" />
-                    <span asp-validation-for="@Model.UserName" class="text-danger"></span>
+                    <span asp-validation-for="@Model.UserName" accesskey="UserName" class="text-danger"></span>
                 </div>
                 <div class="text-center mb-3">
                     <label asp-for="@Model.GroupId" class="form-label">Group</label>
@@ -24,7 +24,6 @@
                         <option value="@s.Id">@s.Number</option>
                     }
                      </select>
-                    <span asp-validation-for="GroupId" class="text-danger"></span>
                 </div>
                 <div class="text-center">
                     <button id="login-submit" type="submit" class="btn btn-primary">Add</button>

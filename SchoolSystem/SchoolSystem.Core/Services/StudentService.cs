@@ -3,12 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using SchoolSystem.Core.Contracts;
 using SchoolSystem.Core.Models.Note;
 using SchoolSystem.Core.Models.Student;
-using SchoolSystem.Data.Data;
-using SchoolSystem.Data.Data.Entities;
+using SchoolSystem.Infrastructure.Data;
+using SchoolSystem.Infrastructure.Data.Entities;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using static SchoolSystem.Core.Constraints.ErrorConstants;
 namespace SchoolSystem.Core.Services
 {
     public class StudentService : IStudentService

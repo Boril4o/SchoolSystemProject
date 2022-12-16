@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using static SchoolSystem.Data.Data.Constants.DataConstants;
+using static SchoolSystem.Infrastructure.Data.Constants.DataConstants;
 
 namespace SchoolSystem.Core.Models.Group
 {
@@ -8,7 +8,7 @@ namespace SchoolSystem.Core.Models.Group
         [Required]
         [MaxLength(GroupNumberMaxLength)]
         [MinLength(GroupNumberMinLength)]
-        public string Number { get; set; }
+        public string Number { get; set; } = null!;
 
         [Range(GroupMinPeople, GroupMaxPeople)]
         public int MaxPeople { get; set; }

@@ -5,7 +5,7 @@ namespace SchoolSystem.Areas.Teacher.Controllers
 {
     public class HomeController : Controller
     {
-        [Area(TeacherConstants.AreaName)]
+        [Area(TeacherConstants.TeacherAreaName)]
         [Authorize(Roles = TeacherConstants.TeacherRoleName)]
         public IActionResult Index()
         {

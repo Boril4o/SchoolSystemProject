@@ -1,8 +1,8 @@
-﻿using static SchoolSystem.Data.Data.Constants.DataConstants;
+﻿using static SchoolSystem.Infrastructure.Data.Constants.DataConstants;
 using System.ComponentModel.DataAnnotations;
 
 
-namespace SchoolSystem.Data.Data.Entities
+namespace SchoolSystem.Infrastructure.Data.Entities
 {
     public class Subject
     {

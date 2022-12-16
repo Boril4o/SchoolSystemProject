@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using SchoolSystem.Data.Data.Entities;
+using SchoolSystem.Infrastructure.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SchoolSystem.Data.Data
+namespace SchoolSystem.Infrastructure.Data
 {
     public class ApplicationDbContext : IdentityDbContext<User>
     {

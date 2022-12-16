@@ -8,7 +8,7 @@ using static SchoolSystem.Areas.Student.StudentConstants;
 namespace SchoolSystem.Areas.Student.Controllers
 {
     [Authorize(Roles = StudentRoleName)]
-    [Area(AreaName)]
+    [Area(StudentAreaName)]
     public class StudentController : Controller
     {
         private readonly IStudentService service;
@@ -21,33 +21,13 @@ namespace SchoolSystem.Areas.Student.Controllers
         [HttpGet]
         public async Task<IActionResult> ShowGrades()
         {
-            IEnumerable<StudentGradesViewModel> model;
-            try
-            {
-                model = await service.GetStudentGrades(User);
-            }
-            catch
-            {
-                return NotFound();
-            }
-
-            return View(model);
+            return View(await service.GetStudentGrades(User));
         }
 
         [HttpGet]
         public async Task<IActionResult> ShowNotes()
         {
-            IEnumerable<NoteViewModel> model;
-            try
-            {
-                model = await service.GetStudentNotes(User);
-            }
-            catch
-            {
-                return NotFound();
-            }
-
-            return View(model);
+            return View(await service.GetStudentNotes(User));
         }
     }
 }

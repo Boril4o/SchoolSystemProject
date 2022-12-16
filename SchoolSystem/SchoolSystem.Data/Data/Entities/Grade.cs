@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SchoolSystem.Data.Data.Entities
+namespace SchoolSystem.Infrastructure.Data.Entities
 {
     public class Grade
     {

@@ -7,7 +7,7 @@ using SchoolSystem.Core.Services;
 
 namespace SchoolSystem.Areas.Teacher.Controllers
 {
-    [Area(TeacherConstants.AreaName)]
+    [Area(TeacherConstants.TeacherAreaName)]
     [Authorize(Roles = TeacherConstants.TeacherRoleName)]
     public class TeacherController : Controller
     {
@@ -16,21 +16,6 @@ namespace SchoolSystem.Areas.Teacher.Controllers
         public TeacherController(ITeacherService service)
         {
             this.service = service;
-        }
-
-        private string ErrorMessage(Exception e)
-        {
-            string message;
-            if (e.GetType().Name == nameof(ArgumentException))
-            {
-                message = e.Message;
-            }
-            else
-            {
-                message = "Error";
-            }
-
-            return message;
         }
 
         [HttpGet]
@@ -60,16 +45,8 @@ namespace SchoolSystem.Areas.Teacher.Controllers
         public async Task<IActionResult> AddGrade(AddGradeViewModel model)
         {
             model.StudentId = (int)TempData["StudentId"];
-            try
-            {
-                await service.AddGrade(model, User);
-            }
-            catch (Exception e)
-            {
-                ModelState.AddModelError("", ErrorMessage(e));
-                model.Subjects = await service.GetSubjects();
-                return View(model);
-            }
+
+            await service.AddGrade(model, User);
 
             return RedirectToAction("Index", "Home");
         }
@@ -89,18 +66,15 @@ namespace SchoolSystem.Areas.Teacher.Controllers
         public async Task<IActionResult> AddNote(AddNoteViewModel model)
         {
             model.StudentId = (int)TempData["NoteStudentId"];
+            model.Subjects = await service.GetSubjects();
 
-            try
+            if (!ModelState.IsValid)
             {
-                await service.AddNote(model, User);
-            }
-            catch (Exception e)
-            {
-                ModelState.AddModelError("", ErrorMessage(e));
-                model.Subjects = await service.GetSubjects();
                 TempData["NoteStudentId"] = model.StudentId;
                 return View(model);
             }
+
+            await service.AddNote(model, User);
 
             return RedirectToAction("Index", "Home");
         }

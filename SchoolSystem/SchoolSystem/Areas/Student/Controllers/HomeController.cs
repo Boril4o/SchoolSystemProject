@@ -16,21 +16,11 @@ namespace SchoolSystem.Areas.Student.Controllers
         }
 
         [Authorize(Roles = StudentRoleName)]
-        [Area(AreaName)]
+        [Area(StudentAreaName)]
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            StudentHomePageStatsViewModel model;
-            try
-            {
-                model = await service.GetStudentHomePageStats(User);
-            }
-            catch
-            {
-                return NotFound();
-            }
-
-            return View(model);
+            return View(await service.GetStudentHomePageStats(User));
         }
     }
 }

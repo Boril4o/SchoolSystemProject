@@ -14,7 +14,7 @@ namespace SchoolSystem.Core.Models.Grade
 
         public int SubjectId { get; set; }
 
-        public IEnumerable<SchoolSystem.Data.Data.Entities.Subject> Subjects { get; set; } =
-            new List<SchoolSystem.Data.Data.Entities.Subject>();
+        public IEnumerable<Infrastructure.Data.Entities.Subject>? Subjects { get; set; } =
+            new List<Infrastructure.Data.Entities.Subject>();
     }
 }

@@ -1,4 +1,4 @@
-﻿using static SchoolSystem.Data.Data.Constants.DataConstants;
+﻿using static SchoolSystem.Infrastructure.Data.Constants.DataConstants;
 using System.ComponentModel.DataAnnotations;
 
 
@@ -10,19 +10,21 @@ namespace SchoolSystem.Core.Models.Student
 
         [Required]
         [MaxLength(UserFirstNameMaxLength)]
-        public string UserName { get; set; }
+        public string UserName { get; set; } = null!;
 
         [Required]
         [MaxLength(UserFirstNameMaxLength)]
-        public string FirstName { get; set; }
+        [MinLength(UserFirstNameMinLength)]
+        public string FirstName { get; set; } = null!;
 
         [Required]
         [MaxLength(UserLastNameMaxLength)]
-        public string LastName { get; set; }
+        [MinLength(UserLastNameMinLength)]
+        public string LastName { get; set; } = null!;
 
         public int? GroupID { get; set; }
 
-        public IEnumerable<SchoolSystem.Data.Data.Entities.Group> Groups { get; set; } =
-            new List<SchoolSystem.Data.Data.Entities.Group>();
+        public IEnumerable<Infrastructure.Data.Entities.Group>? Groups { get; set; } =
+            new List<Infrastructure.Data.Entities.Group>();
     }
 }

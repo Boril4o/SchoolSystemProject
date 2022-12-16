@@ -12,6 +12,6 @@ namespace SchoolSystem.Core.Models.Student
 
         public int GroupId { get; set; }
 
-        public IEnumerable<SchoolSystem.Data.Data.Entities.Group> Groups { get; set; }
+        public IEnumerable<Infrastructure.Data.Entities.Group>? Groups { get; set; }
     }
 }

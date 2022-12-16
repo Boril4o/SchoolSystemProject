@@ -2,7 +2,7 @@
 using SchoolSystem.Core.Models.Group;
 using SchoolSystem.Core.Models.Note;
 using SchoolSystem.Core.Models.Student;
-using SchoolSystem.Data.Data.Entities;
+using SchoolSystem.Infrastructure.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

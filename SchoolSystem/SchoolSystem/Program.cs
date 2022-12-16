@@ -2,8 +2,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SchoolSystem.Core.Contracts;
 using SchoolSystem.Core.Services;
-using SchoolSystem.Data.Data;
-using SchoolSystem.Data.Data.Entities;
+using SchoolSystem.Infrastructure.Data;
+using SchoolSystem.Infrastructure.Data.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +30,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<ITeacherService, TeacherService>();
 builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
