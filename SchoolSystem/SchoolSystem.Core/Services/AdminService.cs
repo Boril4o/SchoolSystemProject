@@ -170,6 +170,8 @@ namespace SchoolSystem.Core.Services
         {
             Student s = await GetStudent(id);
 
+            await userManager.RemoveFromRoleAsync(context.Users.Find(s.UserId), studentRole);
+
             context.Students.Remove(s);
             await context.SaveChangesAsync();
         }
