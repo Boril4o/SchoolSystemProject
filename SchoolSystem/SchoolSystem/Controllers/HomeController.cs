@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SchoolSystem.Models;
+using SchoolSystem.Core.Models;
 using System.Diagnostics;
 using static SchoolSystem.Areas.Admin.AdminConstans;
 using static SchoolSystem.Areas.Teacher.TeacherConstants;

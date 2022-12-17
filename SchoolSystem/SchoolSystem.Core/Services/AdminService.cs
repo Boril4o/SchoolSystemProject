@@ -81,7 +81,7 @@ namespace SchoolSystem.Core.Services
 
             var result = await userManager.AddToRoleAsync(user, "Teacher");
 
-            Teacher teacher;
+            Teacher teacher = new();
 
             if (group == null)
             {
@@ -121,7 +121,7 @@ namespace SchoolSystem.Core.Services
             .ToListAsync();
 
         public async Task<IEnumerable<StudentViewModel>> AllStudents()
-         => await context
+         =>  await context
             .Students
             .Select(s => new StudentViewModel
             {

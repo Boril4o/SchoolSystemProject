@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SchoolSystem.Core.Models.User;
-using SchoolSystem.Data.Data;
 using SchoolSystem.Infrastructure.Data.Entities;
 
 namespace SchoolSystem.Controllers
