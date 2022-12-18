@@ -19,6 +19,11 @@ namespace SchoolSystem.Core.Services
             this.context = context;
         }
 
+        /// <summary>
+        /// Get User by username if username is invalid returns null
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
         public async Task<User> GetUser(string username)
             => await context.Users.FirstOrDefaultAsync(u => u.UserName == username);
     }

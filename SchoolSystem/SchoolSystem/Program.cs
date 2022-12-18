@@ -4,6 +4,7 @@ using SchoolSystem.Core.Contracts;
 using SchoolSystem.Core.Services;
 using SchoolSystem.Infrastructure.Data;
 using SchoolSystem.Infrastructure.Data.Entities;
+using SchoolSystem.ModelBinders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +26,11 @@ builder.Services.AddDefaultIdentity<User>(options =>
 })
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddMvcOptions(options =>
+    {
+        options.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
+    });
 
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<ITeacherService, TeacherService>();

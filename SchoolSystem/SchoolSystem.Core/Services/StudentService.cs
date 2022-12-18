@@ -22,12 +22,19 @@ namespace SchoolSystem.Core.Services
             this.userManager = userManager;
         }
 
+        /// <summary>
+        /// Get student subjects and grades
+        /// </summary>
+        /// <param name="currentUser"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<StudentGradesViewModel>> GetStudentGrades(ClaimsPrincipal currentUser)
         {
             List<StudentGradesViewModel> model = new List<StudentGradesViewModel>();
-
+            
+            //Find current user
             User user = await userManager.GetUserAsync(currentUser);
 
+            //Get current student
             var student = await context
                .Students
                .Where(s => s.UserId == user.Id)
@@ -35,6 +42,9 @@ namespace SchoolSystem.Core.Services
                .ThenInclude(g => g.Subject)
                .FirstOrDefaultAsync();
 
+            //We make foreach of subjects and for every subject if subject name is
+            //equal to grades.subject.name property then we add the grade. if we have added 15 grades we add new line.
+            //And at the end we make StudentGradesViewModel and add it to model list at the beginning of the method
             foreach (var s in context.Subjects)
             {
                 StringBuilder sb = new StringBuilder();
@@ -131,6 +141,12 @@ namespace SchoolSystem.Core.Services
             return model;
         }
 
+        /// <summary>
+        /// Get current student all notes. Every note has Title, Description, SubjectName, TeacherName, IsPositive and Date properties
+        /// if isPostitive is false means the note is bad(doesn't listen in class) otherwise is good
+        /// </summary>
+        /// <param name="currentUser"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<NoteViewModel>> GetStudentNotes(ClaimsPrincipal currentUser)
         {
             User user = await userManager.GetUserAsync(currentUser);

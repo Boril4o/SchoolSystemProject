@@ -4,12 +4,24 @@
 
 @if(!User.Identity.IsAuthenticated)
 {
-<div class="text-center">
-  <h1 class="display-4">Welcome</h1>
-  <p1>You are not logged into an account.</p1>
-  <br><br>
-  <div>
-      <a class="btn btn-success btn-lg" role="button"  asp-controller="User" asp-action="Register">Register</a>
-  </div>
+<div class="text-center bg-light mt-4 p-5">
+  <h1 >HELLO</h1>
+  <h4>
+      This is the best school site. In our site every student can see their grades and notes.
+      Also they can see their best subject, place in class, average grade and amount of grades they have.
+      Teacher can see all classes and add grades and notes.
+      We will be happy if you join our team.
+  </h4>
+   <a class="btn btn-success btn-lg" role="button"  asp-controller="User" asp-action="Register">Register</a>
+</div>
+}
+else
+{
+  <div class="text-center bg-light mt-4 p-5">
+  <h1>Welcome</h1>
+  <h4>
+     Unfortunately you are not verified as student or teacher.
+     You can connect with your teacher or somebody else in your school.
+  </h4>
 </div>
 }
